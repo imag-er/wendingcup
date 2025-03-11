@@ -1,0 +1,18 @@
+syntax =  "proto3";
+
+package board;
+
+option go_package = "/board";
+
+service Board {
+    rpc Board(BoardRequest) returns (BoardResponse) ;
+}
+
+
+message BoardRequest {
+}
+
+message BoardResponse {
+    uint32 status = 1;
+    string message = 2;
+}

@@ -5,8 +5,9 @@ package judge;
 option go_package = "/judge";
 
 service Judge {
-    rpc Judge(JudgeRequest) returns (JudgeResponse) ;
+    rpc Judge(JudgeRequest) returns (JudgeResponse);
 }
+
 message JudgeRequest {
 }
 

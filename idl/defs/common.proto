@@ -7,3 +7,14 @@ message Player {
     string phonenumber = 2;
     string student_id = 3;
 }
+
+message TeamInfo {
+    string team_id = 1;
+    repeated Player players = 2;
+}
+
+
+message JudgeResult {
+    string team_id = 1;
+    float score = 2;
+}

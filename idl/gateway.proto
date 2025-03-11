@@ -3,16 +3,79 @@ syntax =  "proto3";
 package gateway;
 
 option go_package = "/gateway";
-import "common.proto";
+import "defs/api.proto";
+import "defs/common.proto";
 
-
-service Gateway {
-    rpc Register(RegisterRequest) returns (RegisterResponse) ;
+service User {
+    rpc Register(RegisterRequest) returns (RegisterResponse)  {
+        option (api.post)  = "/register";
+    };
+    rpc Login(LoginRequest) returns (LoginResponse) {
+        option (api.post)  = "/login";
+    };
+}
+service Board {
+    rpc GetBoard(GetBoardRequest) returns (GetBoardResponse) {
+        option (api.get)  = "/board";
+    };
+}
+service Submit {
+    rpc Submit(SubmitRequest) returns (SubmitResponse) {
+        option (api.post)  = "/submit";
+    };
+}
+service Judge {
+    rpc GetJudgeResult(GetJudgeResultRequest) returns (GetJudgeResultResponse) {
+        option (api.get)  = "/judge_result";
+    };
 }
 message RegisterRequest {
-    string teamname = 1;
-    repeated common.Player teammates = 2;
+    string teamname = 1 [(api.form)="team_name"];
+    repeated common.Player players = 2 [(api.form)="players"];
 }
 
 message RegisterResponse {
+    uint32 status = 1;
+    string msg = 2;
+    common.TeamInfo teaminfo = 3;
+}
+
+message LoginRequest {
+    string team_id = 1 [(api.form)="team_id"];
+}
+
+message LoginResponse {
+    uint32 status = 1;
+    string msg = 2;
+    common.TeamInfo teaminfo = 3;
+}
+
+
+message SubmitRequest {
+    string teamname = 1 [(api.form)="team_name"];
+    bytes file = 2 [(api.form)="file"];
+}
+
+message SubmitResponse {
+    uint32 status = 1;
+    string msg = 2;
+}
+
+message GetJudgeResultRequest {
+    string submit_id = 1 [(api.query)="submit_id"];
+}
+
+message GetJudgeResultResponse {
+    uint32 status = 1;
+    string msg = 2;
+    common.JudgeResult result = 3;    
+}
+
+
+message GetBoardRequest {
+    
+}
+message GetBoardResponse {
+    uint32 status = 1;
+    string msg = 2;
 }

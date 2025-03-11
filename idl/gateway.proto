@@ -1,0 +1,18 @@
+syntax =  "proto3";
+
+package gateway;
+
+option go_package = "/gateway";
+import "common.proto";
+
+
+service Gateway {
+    rpc Register(RegisterRequest) returns (RegisterResponse) ;
+}
+message RegisterRequest {
+    string teamname = 1;
+    repeated common.Player teammates = 2;
+}
+
+message RegisterResponse {
+}

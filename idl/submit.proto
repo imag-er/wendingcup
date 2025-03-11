@@ -1,0 +1,22 @@
+// 接受用户上传的文件
+// 调用文件存储服务
+// 返回响应
+
+syntax =  "proto3";
+
+package submit;
+
+option go_package = "/submit";
+
+service Submit {
+    rpc SubmitFile(SubmitFileRequest) returns (SubmitFileResponse) ;
+}
+message SubmitFileRequest {
+    string filename = 1;
+    bytes data = 2;
+}
+
+message SubmitFileResponse {
+    string message = 1;
+    uint32 status = 2;
+}

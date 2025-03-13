@@ -15,10 +15,10 @@ import (
 var errInvalidMessageType = errors.New("invalid message type for service method handler")
 
 var serviceMethods = map[string]kitex.MethodInfo{
-	"SubmitFile": kitex.NewMethodInfo(
-		submitFileHandler,
-		newSubmitFileArgs,
-		newSubmitFileResult,
+	"Submit": kitex.NewMethodInfo(
+		submitHandler,
+		newSubmitArgs,
+		newSubmitResult,
 		false,
 		kitex.WithStreamingMode(kitex.StreamingUnary),
 	),
@@ -88,73 +88,73 @@ func newServiceInfo(hasStreaming bool, keepStreamingMethods bool, keepNonStreami
 	return svcInfo
 }
 
-func submitFileHandler(ctx context.Context, handler interface{}, arg, result interface{}) error {
+func submitHandler(ctx context.Context, handler interface{}, arg, result interface{}) error {
 	switch s := arg.(type) {
 	case *streaming.Args:
 		st := s.Stream
-		req := new(submit.SubmitFileRequest)
+		req := new(submit.SubmitRequest)
 		if err := st.RecvMsg(req); err != nil {
 			return err
 		}
-		resp, err := handler.(submit.Submit).SubmitFile(ctx, req)
+		resp, err := handler.(submit.Submit).Submit(ctx, req)
 		if err != nil {
 			return err
 		}
 		return st.SendMsg(resp)
-	case *SubmitFileArgs:
-		success, err := handler.(submit.Submit).SubmitFile(ctx, s.Req)
+	case *SubmitArgs:
+		success, err := handler.(submit.Submit).Submit(ctx, s.Req)
 		if err != nil {
 			return err
 		}
-		realResult := result.(*SubmitFileResult)
+		realResult := result.(*SubmitResult)
 		realResult.Success = success
 		return nil
 	default:
 		return errInvalidMessageType
 	}
 }
-func newSubmitFileArgs() interface{} {
-	return &SubmitFileArgs{}
+func newSubmitArgs() interface{} {
+	return &SubmitArgs{}
 }
 
-func newSubmitFileResult() interface{} {
-	return &SubmitFileResult{}
+func newSubmitResult() interface{} {
+	return &SubmitResult{}
 }
 
-type SubmitFileArgs struct {
-	Req *submit.SubmitFileRequest
+type SubmitArgs struct {
+	Req *submit.SubmitRequest
 }
 
-func (p *SubmitFileArgs) FastRead(buf []byte, _type int8, number int32) (n int, err error) {
+func (p *SubmitArgs) FastRead(buf []byte, _type int8, number int32) (n int, err error) {
 	if !p.IsSetReq() {
-		p.Req = new(submit.SubmitFileRequest)
+		p.Req = new(submit.SubmitRequest)
 	}
 	return p.Req.FastRead(buf, _type, number)
 }
 
-func (p *SubmitFileArgs) FastWrite(buf []byte) (n int) {
+func (p *SubmitArgs) FastWrite(buf []byte) (n int) {
 	if !p.IsSetReq() {
 		return 0
 	}
 	return p.Req.FastWrite(buf)
 }
 
-func (p *SubmitFileArgs) Size() (n int) {
+func (p *SubmitArgs) Size() (n int) {
 	if !p.IsSetReq() {
 		return 0
 	}
 	return p.Req.Size()
 }
 
-func (p *SubmitFileArgs) Marshal(out []byte) ([]byte, error) {
+func (p *SubmitArgs) Marshal(out []byte) ([]byte, error) {
 	if !p.IsSetReq() {
 		return out, nil
 	}
 	return proto.Marshal(p.Req)
 }
 
-func (p *SubmitFileArgs) Unmarshal(in []byte) error {
-	msg := new(submit.SubmitFileRequest)
+func (p *SubmitArgs) Unmarshal(in []byte) error {
+	msg := new(submit.SubmitRequest)
 	if err := proto.Unmarshal(in, msg); err != nil {
 		return err
 	}
@@ -162,59 +162,59 @@ func (p *SubmitFileArgs) Unmarshal(in []byte) error {
 	return nil
 }
 
-var SubmitFileArgs_Req_DEFAULT *submit.SubmitFileRequest
+var SubmitArgs_Req_DEFAULT *submit.SubmitRequest
 
-func (p *SubmitFileArgs) GetReq() *submit.SubmitFileRequest {
+func (p *SubmitArgs) GetReq() *submit.SubmitRequest {
 	if !p.IsSetReq() {
-		return SubmitFileArgs_Req_DEFAULT
+		return SubmitArgs_Req_DEFAULT
 	}
 	return p.Req
 }
 
-func (p *SubmitFileArgs) IsSetReq() bool {
+func (p *SubmitArgs) IsSetReq() bool {
 	return p.Req != nil
 }
 
-func (p *SubmitFileArgs) GetFirstArgument() interface{} {
+func (p *SubmitArgs) GetFirstArgument() interface{} {
 	return p.Req
 }
 
-type SubmitFileResult struct {
-	Success *submit.SubmitFileResponse
+type SubmitResult struct {
+	Success *submit.SubmitResponse
 }
 
-var SubmitFileResult_Success_DEFAULT *submit.SubmitFileResponse
+var SubmitResult_Success_DEFAULT *submit.SubmitResponse
 
-func (p *SubmitFileResult) FastRead(buf []byte, _type int8, number int32) (n int, err error) {
+func (p *SubmitResult) FastRead(buf []byte, _type int8, number int32) (n int, err error) {
 	if !p.IsSetSuccess() {
-		p.Success = new(submit.SubmitFileResponse)
+		p.Success = new(submit.SubmitResponse)
 	}
 	return p.Success.FastRead(buf, _type, number)
 }
 
-func (p *SubmitFileResult) FastWrite(buf []byte) (n int) {
+func (p *SubmitResult) FastWrite(buf []byte) (n int) {
 	if !p.IsSetSuccess() {
 		return 0
 	}
 	return p.Success.FastWrite(buf)
 }
 
-func (p *SubmitFileResult) Size() (n int) {
+func (p *SubmitResult) Size() (n int) {
 	if !p.IsSetSuccess() {
 		return 0
 	}
 	return p.Success.Size()
 }
 
-func (p *SubmitFileResult) Marshal(out []byte) ([]byte, error) {
+func (p *SubmitResult) Marshal(out []byte) ([]byte, error) {
 	if !p.IsSetSuccess() {
 		return out, nil
 	}
 	return proto.Marshal(p.Success)
 }
 
-func (p *SubmitFileResult) Unmarshal(in []byte) error {
-	msg := new(submit.SubmitFileResponse)
+func (p *SubmitResult) Unmarshal(in []byte) error {
+	msg := new(submit.SubmitResponse)
 	if err := proto.Unmarshal(in, msg); err != nil {
 		return err
 	}
@@ -222,22 +222,22 @@ func (p *SubmitFileResult) Unmarshal(in []byte) error {
 	return nil
 }
 
-func (p *SubmitFileResult) GetSuccess() *submit.SubmitFileResponse {
+func (p *SubmitResult) GetSuccess() *submit.SubmitResponse {
 	if !p.IsSetSuccess() {
-		return SubmitFileResult_Success_DEFAULT
+		return SubmitResult_Success_DEFAULT
 	}
 	return p.Success
 }
 
-func (p *SubmitFileResult) SetSuccess(x interface{}) {
-	p.Success = x.(*submit.SubmitFileResponse)
+func (p *SubmitResult) SetSuccess(x interface{}) {
+	p.Success = x.(*submit.SubmitResponse)
 }
 
-func (p *SubmitFileResult) IsSetSuccess() bool {
+func (p *SubmitResult) IsSetSuccess() bool {
 	return p.Success != nil
 }
 
-func (p *SubmitFileResult) GetResult() interface{} {
+func (p *SubmitResult) GetResult() interface{} {
 	return p.Success
 }
 
@@ -251,11 +251,11 @@ func newServiceClient(c client.Client) *kClient {
 	}
 }
 
-func (p *kClient) SubmitFile(ctx context.Context, Req *submit.SubmitFileRequest) (r *submit.SubmitFileResponse, err error) {
-	var _args SubmitFileArgs
+func (p *kClient) Submit(ctx context.Context, Req *submit.SubmitRequest) (r *submit.SubmitResponse, err error) {
+	var _args SubmitArgs
 	_args.Req = Req
-	var _result SubmitFileResult
-	if err = p.c.Call(ctx, "SubmitFile", &_args, &_result); err != nil {
+	var _result SubmitResult
+	if err = p.c.Call(ctx, "Submit", &_args, &_result); err != nil {
 		return
 	}
 	return _result.GetSuccess(), nil

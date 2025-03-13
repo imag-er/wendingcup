@@ -1,0 +1,24 @@
+syntax = "proto3";
+package common;
+option go_package = "common";
+
+message Player {
+    string name = 1;
+    string phonenumber = 2;
+    string student_id = 3;
+}
+
+message JudgeResult {
+    string team_id = 1;
+    string submit_id = 2;
+    float score = 3;
+}
+
+message TeamInfo {
+    string team_id = 1;
+    repeated Player players = 2;
+}
+
+
+
+message Empty {}

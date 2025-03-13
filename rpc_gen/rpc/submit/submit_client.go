@@ -12,7 +12,7 @@ import (
 type RPCClient interface {
 	KitexClient() submit.Client
 	Service() string
-	SubmitFile(ctx context.Context, Req *submit.SubmitFileRequest, callOptions ...callopt.Option) (r *submit.SubmitFileResponse, err error)
+	Submit(ctx context.Context, Req *submit.SubmitRequest, callOptions ...callopt.Option) (r *submit.SubmitResponse, err error)
 }
 
 func NewRPCClient(dstService string, opts ...client.Option) (RPCClient, error) {
@@ -41,6 +41,6 @@ func (c *clientImpl) KitexClient() submit.Client {
 	return c.kitexClient
 }
 
-func (c *clientImpl) SubmitFile(ctx context.Context, Req *submit.SubmitFileRequest, callOptions ...callopt.Option) (r *submit.SubmitFileResponse, err error) {
-	return c.kitexClient.SubmitFile(ctx, Req, callOptions...)
+func (c *clientImpl) Submit(ctx context.Context, Req *submit.SubmitRequest, callOptions ...callopt.Option) (r *submit.SubmitResponse, err error) {
+	return c.kitexClient.Submit(ctx, Req, callOptions...)
 }

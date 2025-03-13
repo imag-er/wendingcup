@@ -5,14 +5,27 @@ package board;
 option go_package = "/board";
 
 service Board {
-    rpc Board(BoardRequest) returns (BoardResponse) ;
+    rpc GetBoard(GetBoardRequest) returns (GetBoardResponse) {}
+    rpc AppendJudgeResult(AppendJudgeResultRequest) returns (AppendJudgeResultResponse) {}
 }
 
 
-message BoardRequest {
+message GetBoardRequest {
+    
+}
+message GetBoardResponse {
+    repeated JudgeResult judge_result = 3;
 }
 
-message BoardResponse {
-    uint32 status = 1;
-    string message = 2;
+message AppendJudgeResultRequest {
+    JudgeResult judge_result = 1;
+}
+
+message AppendJudgeResultResponse {
+}
+
+message JudgeResult {
+    string team_id = 1;
+    string submit_id = 2;
+    float score = 3;
 }

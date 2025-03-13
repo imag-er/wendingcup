@@ -2,13 +2,50 @@ syntax =  "proto3";
 
 package user;
 
-option go_package = "/user";
+option go_package = "user";
 
+// 定义服务
 service User {
     rpc Login(LoginRequest) returns (LoginResponse) ;
+    rpc Register(RegisterRequest) returns (RegisterResponse) ;
+    rpc GetTeamInfo(GetTeamInfoRequst) returns (TeamInfo) ;
 }
+
+message RegisterRequest {
+    string teamname = 1 ;
+    repeated Player players = 2;
+}
+
+message RegisterResponse {
+    uint32 code = 1;
+    string msg = 2;
+    TeamInfo teaminfo = 3;
+}
+
 message LoginRequest {
+    string team_id = 1;
 }
 
 message LoginResponse {
+    uint32 code = 1;
+    string msg = 2;
+    TeamInfo teaminfo = 3;
+}
+
+
+message Player {
+    string name = 1;
+    string phonenumber = 2;
+    string student_id = 3;
+}
+
+message TeamInfo {
+    string team_id = 1;
+
+    string teamname = 2;
+    repeated Player players = 3;
+}
+
+message GetTeamInfoRequst {
+    string team_id = 1;
 }

@@ -12,7 +12,7 @@ var (
 	_ = fastpb.Skip
 )
 
-func (x *BoardRequest) FastRead(buf []byte, _type int8, number int32) (offset int, err error) {
+func (x *GetBoardRequest) FastRead(buf []byte, _type int8, number int32) (offset int, err error) {
 	switch number {
 	default:
 		offset, err = fastpb.Skip(buf, _type, number)
@@ -25,15 +25,10 @@ SkipFieldError:
 	return offset, fmt.Errorf("%T cannot parse invalid wire-format data, error: %s", x, err)
 }
 
-func (x *BoardResponse) FastRead(buf []byte, _type int8, number int32) (offset int, err error) {
+func (x *GetBoardResponse) FastRead(buf []byte, _type int8, number int32) (offset int, err error) {
 	switch number {
-	case 1:
-		offset, err = x.fastReadField1(buf, _type)
-		if err != nil {
-			goto ReadFieldError
-		}
-	case 2:
-		offset, err = x.fastReadField2(buf, _type)
+	case 3:
+		offset, err = x.fastReadField3(buf, _type)
 		if err != nil {
 			goto ReadFieldError
 		}
@@ -47,86 +42,285 @@ func (x *BoardResponse) FastRead(buf []byte, _type int8, number int32) (offset i
 SkipFieldError:
 	return offset, fmt.Errorf("%T cannot parse invalid wire-format data, error: %s", x, err)
 ReadFieldError:
-	return offset, fmt.Errorf("%T read field %d '%s' error: %s", x, number, fieldIDToName_BoardResponse[number], err)
+	return offset, fmt.Errorf("%T read field %d '%s' error: %s", x, number, fieldIDToName_GetBoardResponse[number], err)
 }
 
-func (x *BoardResponse) fastReadField1(buf []byte, _type int8) (offset int, err error) {
-	x.Status, offset, err = fastpb.ReadUint32(buf, _type)
+func (x *GetBoardResponse) fastReadField3(buf []byte, _type int8) (offset int, err error) {
+	var v JudgeResult
+	offset, err = fastpb.ReadMessage(buf, _type, &v)
+	if err != nil {
+		return offset, err
+	}
+	x.JudgeResult = append(x.JudgeResult, &v)
+	return offset, nil
+}
+
+func (x *AppendJudgeResultRequest) FastRead(buf []byte, _type int8, number int32) (offset int, err error) {
+	switch number {
+	case 1:
+		offset, err = x.fastReadField1(buf, _type)
+		if err != nil {
+			goto ReadFieldError
+		}
+	default:
+		offset, err = fastpb.Skip(buf, _type, number)
+		if err != nil {
+			goto SkipFieldError
+		}
+	}
+	return offset, nil
+SkipFieldError:
+	return offset, fmt.Errorf("%T cannot parse invalid wire-format data, error: %s", x, err)
+ReadFieldError:
+	return offset, fmt.Errorf("%T read field %d '%s' error: %s", x, number, fieldIDToName_AppendJudgeResultRequest[number], err)
+}
+
+func (x *AppendJudgeResultRequest) fastReadField1(buf []byte, _type int8) (offset int, err error) {
+	var v JudgeResult
+	offset, err = fastpb.ReadMessage(buf, _type, &v)
+	if err != nil {
+		return offset, err
+	}
+	x.JudgeResult = &v
+	return offset, nil
+}
+
+func (x *AppendJudgeResultResponse) FastRead(buf []byte, _type int8, number int32) (offset int, err error) {
+	switch number {
+	default:
+		offset, err = fastpb.Skip(buf, _type, number)
+		if err != nil {
+			goto SkipFieldError
+		}
+	}
+	return offset, nil
+SkipFieldError:
+	return offset, fmt.Errorf("%T cannot parse invalid wire-format data, error: %s", x, err)
+}
+
+func (x *JudgeResult) FastRead(buf []byte, _type int8, number int32) (offset int, err error) {
+	switch number {
+	case 1:
+		offset, err = x.fastReadField1(buf, _type)
+		if err != nil {
+			goto ReadFieldError
+		}
+	case 2:
+		offset, err = x.fastReadField2(buf, _type)
+		if err != nil {
+			goto ReadFieldError
+		}
+	case 3:
+		offset, err = x.fastReadField3(buf, _type)
+		if err != nil {
+			goto ReadFieldError
+		}
+	default:
+		offset, err = fastpb.Skip(buf, _type, number)
+		if err != nil {
+			goto SkipFieldError
+		}
+	}
+	return offset, nil
+SkipFieldError:
+	return offset, fmt.Errorf("%T cannot parse invalid wire-format data, error: %s", x, err)
+ReadFieldError:
+	return offset, fmt.Errorf("%T read field %d '%s' error: %s", x, number, fieldIDToName_JudgeResult[number], err)
+}
+
+func (x *JudgeResult) fastReadField1(buf []byte, _type int8) (offset int, err error) {
+	x.TeamId, offset, err = fastpb.ReadString(buf, _type)
 	return offset, err
 }
 
-func (x *BoardResponse) fastReadField2(buf []byte, _type int8) (offset int, err error) {
-	x.Message, offset, err = fastpb.ReadString(buf, _type)
+func (x *JudgeResult) fastReadField2(buf []byte, _type int8) (offset int, err error) {
+	x.SubmitId, offset, err = fastpb.ReadString(buf, _type)
 	return offset, err
 }
 
-func (x *BoardRequest) FastWrite(buf []byte) (offset int) {
+func (x *JudgeResult) fastReadField3(buf []byte, _type int8) (offset int, err error) {
+	x.Score, offset, err = fastpb.ReadFloat(buf, _type)
+	return offset, err
+}
+
+func (x *GetBoardRequest) FastWrite(buf []byte) (offset int) {
 	if x == nil {
 		return offset
 	}
 	return offset
 }
 
-func (x *BoardResponse) FastWrite(buf []byte) (offset int) {
+func (x *GetBoardResponse) FastWrite(buf []byte) (offset int) {
+	if x == nil {
+		return offset
+	}
+	offset += x.fastWriteField3(buf[offset:])
+	return offset
+}
+
+func (x *GetBoardResponse) fastWriteField3(buf []byte) (offset int) {
+	if x.JudgeResult == nil {
+		return offset
+	}
+	for i := range x.GetJudgeResult() {
+		offset += fastpb.WriteMessage(buf[offset:], 3, x.GetJudgeResult()[i])
+	}
+	return offset
+}
+
+func (x *AppendJudgeResultRequest) FastWrite(buf []byte) (offset int) {
+	if x == nil {
+		return offset
+	}
+	offset += x.fastWriteField1(buf[offset:])
+	return offset
+}
+
+func (x *AppendJudgeResultRequest) fastWriteField1(buf []byte) (offset int) {
+	if x.JudgeResult == nil {
+		return offset
+	}
+	offset += fastpb.WriteMessage(buf[offset:], 1, x.GetJudgeResult())
+	return offset
+}
+
+func (x *AppendJudgeResultResponse) FastWrite(buf []byte) (offset int) {
+	if x == nil {
+		return offset
+	}
+	return offset
+}
+
+func (x *JudgeResult) FastWrite(buf []byte) (offset int) {
 	if x == nil {
 		return offset
 	}
 	offset += x.fastWriteField1(buf[offset:])
 	offset += x.fastWriteField2(buf[offset:])
+	offset += x.fastWriteField3(buf[offset:])
 	return offset
 }
 
-func (x *BoardResponse) fastWriteField1(buf []byte) (offset int) {
-	if x.Status == 0 {
+func (x *JudgeResult) fastWriteField1(buf []byte) (offset int) {
+	if x.TeamId == "" {
 		return offset
 	}
-	offset += fastpb.WriteUint32(buf[offset:], 1, x.GetStatus())
+	offset += fastpb.WriteString(buf[offset:], 1, x.GetTeamId())
 	return offset
 }
 
-func (x *BoardResponse) fastWriteField2(buf []byte) (offset int) {
-	if x.Message == "" {
+func (x *JudgeResult) fastWriteField2(buf []byte) (offset int) {
+	if x.SubmitId == "" {
 		return offset
 	}
-	offset += fastpb.WriteString(buf[offset:], 2, x.GetMessage())
+	offset += fastpb.WriteString(buf[offset:], 2, x.GetSubmitId())
 	return offset
 }
 
-func (x *BoardRequest) Size() (n int) {
+func (x *JudgeResult) fastWriteField3(buf []byte) (offset int) {
+	if x.Score == 0 {
+		return offset
+	}
+	offset += fastpb.WriteFloat(buf[offset:], 3, x.GetScore())
+	return offset
+}
+
+func (x *GetBoardRequest) Size() (n int) {
 	if x == nil {
 		return n
 	}
 	return n
 }
 
-func (x *BoardResponse) Size() (n int) {
+func (x *GetBoardResponse) Size() (n int) {
+	if x == nil {
+		return n
+	}
+	n += x.sizeField3()
+	return n
+}
+
+func (x *GetBoardResponse) sizeField3() (n int) {
+	if x.JudgeResult == nil {
+		return n
+	}
+	for i := range x.GetJudgeResult() {
+		n += fastpb.SizeMessage(3, x.GetJudgeResult()[i])
+	}
+	return n
+}
+
+func (x *AppendJudgeResultRequest) Size() (n int) {
+	if x == nil {
+		return n
+	}
+	n += x.sizeField1()
+	return n
+}
+
+func (x *AppendJudgeResultRequest) sizeField1() (n int) {
+	if x.JudgeResult == nil {
+		return n
+	}
+	n += fastpb.SizeMessage(1, x.GetJudgeResult())
+	return n
+}
+
+func (x *AppendJudgeResultResponse) Size() (n int) {
+	if x == nil {
+		return n
+	}
+	return n
+}
+
+func (x *JudgeResult) Size() (n int) {
 	if x == nil {
 		return n
 	}
 	n += x.sizeField1()
 	n += x.sizeField2()
+	n += x.sizeField3()
 	return n
 }
 
-func (x *BoardResponse) sizeField1() (n int) {
-	if x.Status == 0 {
+func (x *JudgeResult) sizeField1() (n int) {
+	if x.TeamId == "" {
 		return n
 	}
-	n += fastpb.SizeUint32(1, x.GetStatus())
+	n += fastpb.SizeString(1, x.GetTeamId())
 	return n
 }
 
-func (x *BoardResponse) sizeField2() (n int) {
-	if x.Message == "" {
+func (x *JudgeResult) sizeField2() (n int) {
+	if x.SubmitId == "" {
 		return n
 	}
-	n += fastpb.SizeString(2, x.GetMessage())
+	n += fastpb.SizeString(2, x.GetSubmitId())
 	return n
 }
 
-var fieldIDToName_BoardRequest = map[int32]string{}
+func (x *JudgeResult) sizeField3() (n int) {
+	if x.Score == 0 {
+		return n
+	}
+	n += fastpb.SizeFloat(3, x.GetScore())
+	return n
+}
 
-var fieldIDToName_BoardResponse = map[int32]string{
-	1: "Status",
-	2: "Message",
+var fieldIDToName_GetBoardRequest = map[int32]string{}
+
+var fieldIDToName_GetBoardResponse = map[int32]string{
+	3: "JudgeResult",
+}
+
+var fieldIDToName_AppendJudgeResultRequest = map[int32]string{
+	1: "JudgeResult",
+}
+
+var fieldIDToName_AppendJudgeResultResponse = map[int32]string{}
+
+var fieldIDToName_JudgeResult = map[int32]string{
+	1: "TeamId",
+	2: "SubmitId",
+	3: "Score",
 }

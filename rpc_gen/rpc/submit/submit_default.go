@@ -7,10 +7,10 @@ import (
 	"github.com/cloudwego/kitex/pkg/klog"
 )
 
-func SubmitFile(ctx context.Context, req *submit.SubmitFileRequest, callOptions ...callopt.Option) (resp *submit.SubmitFileResponse, err error) {
-	resp, err = defaultClient.SubmitFile(ctx, req, callOptions...)
+func Submit(ctx context.Context, req *submit.SubmitRequest, callOptions ...callopt.Option) (resp *submit.SubmitResponse, err error) {
+	resp, err = defaultClient.Submit(ctx, req, callOptions...)
 	if err != nil {
-		klog.CtxErrorf(ctx, "SubmitFile call failed,err =%+v", err)
+		klog.CtxErrorf(ctx, "Submit call failed,err =%+v", err)
 		return nil, err
 	}
 	return resp, nil

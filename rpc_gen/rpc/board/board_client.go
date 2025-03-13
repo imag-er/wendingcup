@@ -12,7 +12,8 @@ import (
 type RPCClient interface {
 	KitexClient() board.Client
 	Service() string
-	Board(ctx context.Context, Req *board.BoardRequest, callOptions ...callopt.Option) (r *board.BoardResponse, err error)
+	GetBoard(ctx context.Context, Req *board.GetBoardRequest, callOptions ...callopt.Option) (r *board.GetBoardResponse, err error)
+	AppendJudgeResult(ctx context.Context, Req *board.AppendJudgeResultRequest, callOptions ...callopt.Option) (r *board.AppendJudgeResultResponse, err error)
 }
 
 func NewRPCClient(dstService string, opts ...client.Option) (RPCClient, error) {
@@ -41,6 +42,10 @@ func (c *clientImpl) KitexClient() board.Client {
 	return c.kitexClient
 }
 
-func (c *clientImpl) Board(ctx context.Context, Req *board.BoardRequest, callOptions ...callopt.Option) (r *board.BoardResponse, err error) {
-	return c.kitexClient.Board(ctx, Req, callOptions...)
+func (c *clientImpl) GetBoard(ctx context.Context, Req *board.GetBoardRequest, callOptions ...callopt.Option) (r *board.GetBoardResponse, err error) {
+	return c.kitexClient.GetBoard(ctx, Req, callOptions...)
+}
+
+func (c *clientImpl) AppendJudgeResult(ctx context.Context, Req *board.AppendJudgeResultRequest, callOptions ...callopt.Option) (r *board.AppendJudgeResultResponse, err error) {
+	return c.kitexClient.AppendJudgeResult(ctx, Req, callOptions...)
 }

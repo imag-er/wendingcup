@@ -21,14 +21,14 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
-type BoardRequest struct {
+type GetBoardRequest struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 }
 
-func (x *BoardRequest) Reset() {
-	*x = BoardRequest{}
+func (x *GetBoardRequest) Reset() {
+	*x = GetBoardRequest{}
 	if protoimpl.UnsafeEnabled {
 		mi := &file_board_proto_msgTypes[0]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -36,13 +36,13 @@ func (x *BoardRequest) Reset() {
 	}
 }
 
-func (x *BoardRequest) String() string {
+func (x *GetBoardRequest) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*BoardRequest) ProtoMessage() {}
+func (*GetBoardRequest) ProtoMessage() {}
 
-func (x *BoardRequest) ProtoReflect() protoreflect.Message {
+func (x *GetBoardRequest) ProtoReflect() protoreflect.Message {
 	mi := &file_board_proto_msgTypes[0]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -54,22 +54,21 @@ func (x *BoardRequest) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use BoardRequest.ProtoReflect.Descriptor instead.
-func (*BoardRequest) Descriptor() ([]byte, []int) {
+// Deprecated: Use GetBoardRequest.ProtoReflect.Descriptor instead.
+func (*GetBoardRequest) Descriptor() ([]byte, []int) {
 	return file_board_proto_rawDescGZIP(), []int{0}
 }
 
-type BoardResponse struct {
+type GetBoardResponse struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Status  uint32 `protobuf:"varint,1,opt,name=status,proto3" json:"status,omitempty"`
-	Message string `protobuf:"bytes,2,opt,name=message,proto3" json:"message,omitempty"`
+	JudgeResult []*JudgeResult `protobuf:"bytes,3,rep,name=judge_result,json=judgeResult,proto3" json:"judge_result,omitempty"`
 }
 
-func (x *BoardResponse) Reset() {
-	*x = BoardResponse{}
+func (x *GetBoardResponse) Reset() {
+	*x = GetBoardResponse{}
 	if protoimpl.UnsafeEnabled {
 		mi := &file_board_proto_msgTypes[1]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -77,13 +76,13 @@ func (x *BoardResponse) Reset() {
 	}
 }
 
-func (x *BoardResponse) String() string {
+func (x *GetBoardResponse) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*BoardResponse) ProtoMessage() {}
+func (*GetBoardResponse) ProtoMessage() {}
 
-func (x *BoardResponse) ProtoReflect() protoreflect.Message {
+func (x *GetBoardResponse) ProtoReflect() protoreflect.Message {
 	mi := &file_board_proto_msgTypes[1]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -95,43 +94,204 @@ func (x *BoardResponse) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use BoardResponse.ProtoReflect.Descriptor instead.
-func (*BoardResponse) Descriptor() ([]byte, []int) {
+// Deprecated: Use GetBoardResponse.ProtoReflect.Descriptor instead.
+func (*GetBoardResponse) Descriptor() ([]byte, []int) {
 	return file_board_proto_rawDescGZIP(), []int{1}
 }
 
-func (x *BoardResponse) GetStatus() uint32 {
+func (x *GetBoardResponse) GetJudgeResult() []*JudgeResult {
 	if x != nil {
-		return x.Status
+		return x.JudgeResult
 	}
-	return 0
+	return nil
 }
 
-func (x *BoardResponse) GetMessage() string {
+type AppendJudgeResultRequest struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	JudgeResult *JudgeResult `protobuf:"bytes,1,opt,name=judge_result,json=judgeResult,proto3" json:"judge_result,omitempty"`
+}
+
+func (x *AppendJudgeResultRequest) Reset() {
+	*x = AppendJudgeResultRequest{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_board_proto_msgTypes[2]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *AppendJudgeResultRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*AppendJudgeResultRequest) ProtoMessage() {}
+
+func (x *AppendJudgeResultRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_board_proto_msgTypes[2]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use AppendJudgeResultRequest.ProtoReflect.Descriptor instead.
+func (*AppendJudgeResultRequest) Descriptor() ([]byte, []int) {
+	return file_board_proto_rawDescGZIP(), []int{2}
+}
+
+func (x *AppendJudgeResultRequest) GetJudgeResult() *JudgeResult {
 	if x != nil {
-		return x.Message
+		return x.JudgeResult
+	}
+	return nil
+}
+
+type AppendJudgeResultResponse struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+}
+
+func (x *AppendJudgeResultResponse) Reset() {
+	*x = AppendJudgeResultResponse{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_board_proto_msgTypes[3]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *AppendJudgeResultResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*AppendJudgeResultResponse) ProtoMessage() {}
+
+func (x *AppendJudgeResultResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_board_proto_msgTypes[3]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use AppendJudgeResultResponse.ProtoReflect.Descriptor instead.
+func (*AppendJudgeResultResponse) Descriptor() ([]byte, []int) {
+	return file_board_proto_rawDescGZIP(), []int{3}
+}
+
+type JudgeResult struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	TeamId   string  `protobuf:"bytes,1,opt,name=team_id,json=teamId,proto3" json:"team_id,omitempty"`
+	SubmitId string  `protobuf:"bytes,2,opt,name=submit_id,json=submitId,proto3" json:"submit_id,omitempty"`
+	Score    float32 `protobuf:"fixed32,3,opt,name=score,proto3" json:"score,omitempty"`
+}
+
+func (x *JudgeResult) Reset() {
+	*x = JudgeResult{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_board_proto_msgTypes[4]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *JudgeResult) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*JudgeResult) ProtoMessage() {}
+
+func (x *JudgeResult) ProtoReflect() protoreflect.Message {
+	mi := &file_board_proto_msgTypes[4]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use JudgeResult.ProtoReflect.Descriptor instead.
+func (*JudgeResult) Descriptor() ([]byte, []int) {
+	return file_board_proto_rawDescGZIP(), []int{4}
+}
+
+func (x *JudgeResult) GetTeamId() string {
+	if x != nil {
+		return x.TeamId
 	}
 	return ""
+}
+
+func (x *JudgeResult) GetSubmitId() string {
+	if x != nil {
+		return x.SubmitId
+	}
+	return ""
+}
+
+func (x *JudgeResult) GetScore() float32 {
+	if x != nil {
+		return x.Score
+	}
+	return 0
 }
 
 var File_board_proto protoreflect.FileDescriptor
 
 var file_board_proto_rawDesc = []byte{
 	0x0a, 0x0b, 0x62, 0x6f, 0x61, 0x72, 0x64, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x12, 0x05, 0x62,
-	0x6f, 0x61, 0x72, 0x64, 0x22, 0x0e, 0x0a, 0x0c, 0x42, 0x6f, 0x61, 0x72, 0x64, 0x52, 0x65, 0x71,
-	0x75, 0x65, 0x73, 0x74, 0x22, 0x41, 0x0a, 0x0d, 0x42, 0x6f, 0x61, 0x72, 0x64, 0x52, 0x65, 0x73,
-	0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x16, 0x0a, 0x06, 0x73, 0x74, 0x61, 0x74, 0x75, 0x73, 0x18,
-	0x01, 0x20, 0x01, 0x28, 0x0d, 0x52, 0x06, 0x73, 0x74, 0x61, 0x74, 0x75, 0x73, 0x12, 0x18, 0x0a,
-	0x07, 0x6d, 0x65, 0x73, 0x73, 0x61, 0x67, 0x65, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x07,
-	0x6d, 0x65, 0x73, 0x73, 0x61, 0x67, 0x65, 0x32, 0x3b, 0x0a, 0x05, 0x42, 0x6f, 0x61, 0x72, 0x64,
-	0x12, 0x32, 0x0a, 0x05, 0x42, 0x6f, 0x61, 0x72, 0x64, 0x12, 0x13, 0x2e, 0x62, 0x6f, 0x61, 0x72,
-	0x64, 0x2e, 0x42, 0x6f, 0x61, 0x72, 0x64, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x14,
-	0x2e, 0x62, 0x6f, 0x61, 0x72, 0x64, 0x2e, 0x42, 0x6f, 0x61, 0x72, 0x64, 0x52, 0x65, 0x73, 0x70,
-	0x6f, 0x6e, 0x73, 0x65, 0x42, 0x37, 0x5a, 0x35, 0x67, 0x69, 0x74, 0x68, 0x75, 0x62, 0x2e, 0x63,
-	0x6f, 0x6d, 0x2f, 0x69, 0x6d, 0x61, 0x67, 0x2d, 0x65, 0x72, 0x2f, 0x77, 0x65, 0x6e, 0x64, 0x69,
-	0x6e, 0x67, 0x63, 0x75, 0x70, 0x2f, 0x72, 0x70, 0x63, 0x5f, 0x67, 0x65, 0x6e, 0x2f, 0x6b, 0x69,
-	0x74, 0x65, 0x78, 0x5f, 0x67, 0x65, 0x6e, 0x2f, 0x62, 0x6f, 0x61, 0x72, 0x64, 0x62, 0x06, 0x70,
-	0x72, 0x6f, 0x74, 0x6f, 0x33,
+	0x6f, 0x61, 0x72, 0x64, 0x22, 0x11, 0x0a, 0x0f, 0x47, 0x65, 0x74, 0x42, 0x6f, 0x61, 0x72, 0x64,
+	0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x22, 0x49, 0x0a, 0x10, 0x47, 0x65, 0x74, 0x42, 0x6f,
+	0x61, 0x72, 0x64, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x35, 0x0a, 0x0c, 0x6a,
+	0x75, 0x64, 0x67, 0x65, 0x5f, 0x72, 0x65, 0x73, 0x75, 0x6c, 0x74, 0x18, 0x03, 0x20, 0x03, 0x28,
+	0x0b, 0x32, 0x12, 0x2e, 0x62, 0x6f, 0x61, 0x72, 0x64, 0x2e, 0x4a, 0x75, 0x64, 0x67, 0x65, 0x52,
+	0x65, 0x73, 0x75, 0x6c, 0x74, 0x52, 0x0b, 0x6a, 0x75, 0x64, 0x67, 0x65, 0x52, 0x65, 0x73, 0x75,
+	0x6c, 0x74, 0x22, 0x51, 0x0a, 0x18, 0x41, 0x70, 0x70, 0x65, 0x6e, 0x64, 0x4a, 0x75, 0x64, 0x67,
+	0x65, 0x52, 0x65, 0x73, 0x75, 0x6c, 0x74, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x35,
+	0x0a, 0x0c, 0x6a, 0x75, 0x64, 0x67, 0x65, 0x5f, 0x72, 0x65, 0x73, 0x75, 0x6c, 0x74, 0x18, 0x01,
+	0x20, 0x01, 0x28, 0x0b, 0x32, 0x12, 0x2e, 0x62, 0x6f, 0x61, 0x72, 0x64, 0x2e, 0x4a, 0x75, 0x64,
+	0x67, 0x65, 0x52, 0x65, 0x73, 0x75, 0x6c, 0x74, 0x52, 0x0b, 0x6a, 0x75, 0x64, 0x67, 0x65, 0x52,
+	0x65, 0x73, 0x75, 0x6c, 0x74, 0x22, 0x1b, 0x0a, 0x19, 0x41, 0x70, 0x70, 0x65, 0x6e, 0x64, 0x4a,
+	0x75, 0x64, 0x67, 0x65, 0x52, 0x65, 0x73, 0x75, 0x6c, 0x74, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e,
+	0x73, 0x65, 0x22, 0x59, 0x0a, 0x0b, 0x4a, 0x75, 0x64, 0x67, 0x65, 0x52, 0x65, 0x73, 0x75, 0x6c,
+	0x74, 0x12, 0x17, 0x0a, 0x07, 0x74, 0x65, 0x61, 0x6d, 0x5f, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01,
+	0x28, 0x09, 0x52, 0x06, 0x74, 0x65, 0x61, 0x6d, 0x49, 0x64, 0x12, 0x1b, 0x0a, 0x09, 0x73, 0x75,
+	0x62, 0x6d, 0x69, 0x74, 0x5f, 0x69, 0x64, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x08, 0x73,
+	0x75, 0x62, 0x6d, 0x69, 0x74, 0x49, 0x64, 0x12, 0x14, 0x0a, 0x05, 0x73, 0x63, 0x6f, 0x72, 0x65,
+	0x18, 0x03, 0x20, 0x01, 0x28, 0x02, 0x52, 0x05, 0x73, 0x63, 0x6f, 0x72, 0x65, 0x32, 0xa0, 0x01,
+	0x0a, 0x05, 0x42, 0x6f, 0x61, 0x72, 0x64, 0x12, 0x3d, 0x0a, 0x08, 0x47, 0x65, 0x74, 0x42, 0x6f,
+	0x61, 0x72, 0x64, 0x12, 0x16, 0x2e, 0x62, 0x6f, 0x61, 0x72, 0x64, 0x2e, 0x47, 0x65, 0x74, 0x42,
+	0x6f, 0x61, 0x72, 0x64, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x17, 0x2e, 0x62, 0x6f,
+	0x61, 0x72, 0x64, 0x2e, 0x47, 0x65, 0x74, 0x42, 0x6f, 0x61, 0x72, 0x64, 0x52, 0x65, 0x73, 0x70,
+	0x6f, 0x6e, 0x73, 0x65, 0x22, 0x00, 0x12, 0x58, 0x0a, 0x11, 0x41, 0x70, 0x70, 0x65, 0x6e, 0x64,
+	0x4a, 0x75, 0x64, 0x67, 0x65, 0x52, 0x65, 0x73, 0x75, 0x6c, 0x74, 0x12, 0x1f, 0x2e, 0x62, 0x6f,
+	0x61, 0x72, 0x64, 0x2e, 0x41, 0x70, 0x70, 0x65, 0x6e, 0x64, 0x4a, 0x75, 0x64, 0x67, 0x65, 0x52,
+	0x65, 0x73, 0x75, 0x6c, 0x74, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x20, 0x2e, 0x62,
+	0x6f, 0x61, 0x72, 0x64, 0x2e, 0x41, 0x70, 0x70, 0x65, 0x6e, 0x64, 0x4a, 0x75, 0x64, 0x67, 0x65,
+	0x52, 0x65, 0x73, 0x75, 0x6c, 0x74, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x00,
+	0x42, 0x37, 0x5a, 0x35, 0x67, 0x69, 0x74, 0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x69,
+	0x6d, 0x61, 0x67, 0x2d, 0x65, 0x72, 0x2f, 0x77, 0x65, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x63, 0x75,
+	0x70, 0x2f, 0x72, 0x70, 0x63, 0x5f, 0x67, 0x65, 0x6e, 0x2f, 0x6b, 0x69, 0x74, 0x65, 0x78, 0x5f,
+	0x67, 0x65, 0x6e, 0x2f, 0x62, 0x6f, 0x61, 0x72, 0x64, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f,
+	0x33,
 }
 
 var (
@@ -146,19 +306,26 @@ func file_board_proto_rawDescGZIP() []byte {
 	return file_board_proto_rawDescData
 }
 
-var file_board_proto_msgTypes = make([]protoimpl.MessageInfo, 2)
+var file_board_proto_msgTypes = make([]protoimpl.MessageInfo, 5)
 var file_board_proto_goTypes = []interface{}{
-	(*BoardRequest)(nil),  // 0: board.BoardRequest
-	(*BoardResponse)(nil), // 1: board.BoardResponse
+	(*GetBoardRequest)(nil),           // 0: board.GetBoardRequest
+	(*GetBoardResponse)(nil),          // 1: board.GetBoardResponse
+	(*AppendJudgeResultRequest)(nil),  // 2: board.AppendJudgeResultRequest
+	(*AppendJudgeResultResponse)(nil), // 3: board.AppendJudgeResultResponse
+	(*JudgeResult)(nil),               // 4: board.JudgeResult
 }
 var file_board_proto_depIdxs = []int32{
-	0, // 0: board.Board.Board:input_type -> board.BoardRequest
-	1, // 1: board.Board.Board:output_type -> board.BoardResponse
-	1, // [1:2] is the sub-list for method output_type
-	0, // [0:1] is the sub-list for method input_type
-	0, // [0:0] is the sub-list for extension type_name
-	0, // [0:0] is the sub-list for extension extendee
-	0, // [0:0] is the sub-list for field type_name
+	4, // 0: board.GetBoardResponse.judge_result:type_name -> board.JudgeResult
+	4, // 1: board.AppendJudgeResultRequest.judge_result:type_name -> board.JudgeResult
+	0, // 2: board.Board.GetBoard:input_type -> board.GetBoardRequest
+	2, // 3: board.Board.AppendJudgeResult:input_type -> board.AppendJudgeResultRequest
+	1, // 4: board.Board.GetBoard:output_type -> board.GetBoardResponse
+	3, // 5: board.Board.AppendJudgeResult:output_type -> board.AppendJudgeResultResponse
+	4, // [4:6] is the sub-list for method output_type
+	2, // [2:4] is the sub-list for method input_type
+	2, // [2:2] is the sub-list for extension type_name
+	2, // [2:2] is the sub-list for extension extendee
+	0, // [0:2] is the sub-list for field type_name
 }
 
 func init() { file_board_proto_init() }
@@ -168,7 +335,7 @@ func file_board_proto_init() {
 	}
 	if !protoimpl.UnsafeEnabled {
 		file_board_proto_msgTypes[0].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*BoardRequest); i {
+			switch v := v.(*GetBoardRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -180,7 +347,43 @@ func file_board_proto_init() {
 			}
 		}
 		file_board_proto_msgTypes[1].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*BoardResponse); i {
+			switch v := v.(*GetBoardResponse); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_board_proto_msgTypes[2].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*AppendJudgeResultRequest); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_board_proto_msgTypes[3].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*AppendJudgeResultResponse); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_board_proto_msgTypes[4].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*JudgeResult); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -198,7 +401,7 @@ func file_board_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: file_board_proto_rawDesc,
 			NumEnums:      0,
-			NumMessages:   2,
+			NumMessages:   5,
 			NumExtensions: 0,
 			NumServices:   1,
 		},
@@ -217,5 +420,6 @@ var _ context.Context
 // Code generated by Kitex v0.9.1. DO NOT EDIT.
 
 type Board interface {
-	Board(ctx context.Context, req *BoardRequest) (res *BoardResponse, err error)
+	GetBoard(ctx context.Context, req *GetBoardRequest) (res *GetBoardResponse, err error)
+	AppendJudgeResult(ctx context.Context, req *AppendJudgeResultRequest) (res *AppendJudgeResultResponse, err error)
 }

@@ -1,7 +1,7 @@
 go 1.23.4
 
 use (
-	./app/gateway
-	./app/judge
+	./app/api
 	./app/submit
+	./app/user
 )

@@ -11,7 +11,8 @@ import (
 
 // Client is designed to provide IDL-compatible methods with call-option parameter for kitex framework.
 type Client interface {
-	Board(ctx context.Context, Req *board.BoardRequest, callOptions ...callopt.Option) (r *board.BoardResponse, err error)
+	GetBoard(ctx context.Context, Req *board.GetBoardRequest, callOptions ...callopt.Option) (r *board.GetBoardResponse, err error)
+	AppendJudgeResult(ctx context.Context, Req *board.AppendJudgeResultRequest, callOptions ...callopt.Option) (r *board.AppendJudgeResultResponse, err error)
 }
 
 // NewClient creates a client for the service defined in IDL.
@@ -43,7 +44,12 @@ type kBoardClient struct {
 	*kClient
 }
 
-func (p *kBoardClient) Board(ctx context.Context, Req *board.BoardRequest, callOptions ...callopt.Option) (r *board.BoardResponse, err error) {
+func (p *kBoardClient) GetBoard(ctx context.Context, Req *board.GetBoardRequest, callOptions ...callopt.Option) (r *board.GetBoardResponse, err error) {
 	ctx = client.NewCtxWithCallOptions(ctx, callOptions)
-	return p.kClient.Board(ctx, Req)
+	return p.kClient.GetBoard(ctx, Req)
+}
+
+func (p *kBoardClient) AppendJudgeResult(ctx context.Context, Req *board.AppendJudgeResultRequest, callOptions ...callopt.Option) (r *board.AppendJudgeResultResponse, err error) {
+	ctx = client.NewCtxWithCallOptions(ctx, callOptions)
+	return p.kClient.AppendJudgeResult(ctx, Req)
 }

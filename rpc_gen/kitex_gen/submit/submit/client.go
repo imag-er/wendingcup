@@ -11,7 +11,7 @@ import (
 
 // Client is designed to provide IDL-compatible methods with call-option parameter for kitex framework.
 type Client interface {
-	SubmitFile(ctx context.Context, Req *submit.SubmitFileRequest, callOptions ...callopt.Option) (r *submit.SubmitFileResponse, err error)
+	Submit(ctx context.Context, Req *submit.SubmitRequest, callOptions ...callopt.Option) (r *submit.SubmitResponse, err error)
 }
 
 // NewClient creates a client for the service defined in IDL.
@@ -43,7 +43,7 @@ type kSubmitClient struct {
 	*kClient
 }
 
-func (p *kSubmitClient) SubmitFile(ctx context.Context, Req *submit.SubmitFileRequest, callOptions ...callopt.Option) (r *submit.SubmitFileResponse, err error) {
+func (p *kSubmitClient) Submit(ctx context.Context, Req *submit.SubmitRequest, callOptions ...callopt.Option) (r *submit.SubmitResponse, err error) {
 	ctx = client.NewCtxWithCallOptions(ctx, callOptions)
-	return p.kClient.SubmitFile(ctx, Req)
+	return p.kClient.Submit(ctx, Req)
 }

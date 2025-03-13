@@ -7,10 +7,19 @@ import (
 	"github.com/cloudwego/kitex/pkg/klog"
 )
 
-func Board(ctx context.Context, req *board.BoardRequest, callOptions ...callopt.Option) (resp *board.BoardResponse, err error) {
-	resp, err = defaultClient.Board(ctx, req, callOptions...)
+func GetBoard(ctx context.Context, req *board.GetBoardRequest, callOptions ...callopt.Option) (resp *board.GetBoardResponse, err error) {
+	resp, err = defaultClient.GetBoard(ctx, req, callOptions...)
 	if err != nil {
-		klog.CtxErrorf(ctx, "Board call failed,err =%+v", err)
+		klog.CtxErrorf(ctx, "GetBoard call failed,err =%+v", err)
+		return nil, err
+	}
+	return resp, nil
+}
+
+func AppendJudgeResult(ctx context.Context, req *board.AppendJudgeResultRequest, callOptions ...callopt.Option) (resp *board.AppendJudgeResultResponse, err error) {
+	resp, err = defaultClient.AppendJudgeResult(ctx, req, callOptions...)
+	if err != nil {
+		klog.CtxErrorf(ctx, "AppendJudgeResult call failed,err =%+v", err)
 		return nil, err
 	}
 	return resp, nil

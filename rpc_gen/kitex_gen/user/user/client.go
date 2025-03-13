@@ -12,6 +12,8 @@ import (
 // Client is designed to provide IDL-compatible methods with call-option parameter for kitex framework.
 type Client interface {
 	Login(ctx context.Context, Req *user.LoginRequest, callOptions ...callopt.Option) (r *user.LoginResponse, err error)
+	Register(ctx context.Context, Req *user.RegisterRequest, callOptions ...callopt.Option) (r *user.RegisterResponse, err error)
+	GetTeamInfo(ctx context.Context, Req *user.GetTeamInfoRequst, callOptions ...callopt.Option) (r *user.TeamInfo, err error)
 }
 
 // NewClient creates a client for the service defined in IDL.
@@ -46,4 +48,14 @@ type kUserClient struct {
 func (p *kUserClient) Login(ctx context.Context, Req *user.LoginRequest, callOptions ...callopt.Option) (r *user.LoginResponse, err error) {
 	ctx = client.NewCtxWithCallOptions(ctx, callOptions)
 	return p.kClient.Login(ctx, Req)
+}
+
+func (p *kUserClient) Register(ctx context.Context, Req *user.RegisterRequest, callOptions ...callopt.Option) (r *user.RegisterResponse, err error) {
+	ctx = client.NewCtxWithCallOptions(ctx, callOptions)
+	return p.kClient.Register(ctx, Req)
+}
+
+func (p *kUserClient) GetTeamInfo(ctx context.Context, Req *user.GetTeamInfoRequst, callOptions ...callopt.Option) (r *user.TeamInfo, err error) {
+	ctx = client.NewCtxWithCallOptions(ctx, callOptions)
+	return p.kClient.GetTeamInfo(ctx, Req)
 }

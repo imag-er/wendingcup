@@ -12,7 +12,7 @@ var (
 	_ = fastpb.Skip
 )
 
-func (x *SubmitFileRequest) FastRead(buf []byte, _type int8, number int32) (offset int, err error) {
+func (x *SubmitRequest) FastRead(buf []byte, _type int8, number int32) (offset int, err error) {
 	switch number {
 	case 1:
 		offset, err = x.fastReadField1(buf, _type)
@@ -34,20 +34,20 @@ func (x *SubmitFileRequest) FastRead(buf []byte, _type int8, number int32) (offs
 SkipFieldError:
 	return offset, fmt.Errorf("%T cannot parse invalid wire-format data, error: %s", x, err)
 ReadFieldError:
-	return offset, fmt.Errorf("%T read field %d '%s' error: %s", x, number, fieldIDToName_SubmitFileRequest[number], err)
+	return offset, fmt.Errorf("%T read field %d '%s' error: %s", x, number, fieldIDToName_SubmitRequest[number], err)
 }
 
-func (x *SubmitFileRequest) fastReadField1(buf []byte, _type int8) (offset int, err error) {
-	x.Filename, offset, err = fastpb.ReadString(buf, _type)
+func (x *SubmitRequest) fastReadField1(buf []byte, _type int8) (offset int, err error) {
+	x.TeamId, offset, err = fastpb.ReadString(buf, _type)
 	return offset, err
 }
 
-func (x *SubmitFileRequest) fastReadField2(buf []byte, _type int8) (offset int, err error) {
-	x.Data, offset, err = fastpb.ReadBytes(buf, _type)
+func (x *SubmitRequest) fastReadField2(buf []byte, _type int8) (offset int, err error) {
+	x.File, offset, err = fastpb.ReadBytes(buf, _type)
 	return offset, err
 }
 
-func (x *SubmitFileResponse) FastRead(buf []byte, _type int8, number int32) (offset int, err error) {
+func (x *SubmitResponse) FastRead(buf []byte, _type int8, number int32) (offset int, err error) {
 	switch number {
 	case 1:
 		offset, err = x.fastReadField1(buf, _type)
@@ -56,6 +56,11 @@ func (x *SubmitFileResponse) FastRead(buf []byte, _type int8, number int32) (off
 		}
 	case 2:
 		offset, err = x.fastReadField2(buf, _type)
+		if err != nil {
+			goto ReadFieldError
+		}
+	case 3:
+		offset, err = x.fastReadField3(buf, _type)
 		if err != nil {
 			goto ReadFieldError
 		}
@@ -69,20 +74,25 @@ func (x *SubmitFileResponse) FastRead(buf []byte, _type int8, number int32) (off
 SkipFieldError:
 	return offset, fmt.Errorf("%T cannot parse invalid wire-format data, error: %s", x, err)
 ReadFieldError:
-	return offset, fmt.Errorf("%T read field %d '%s' error: %s", x, number, fieldIDToName_SubmitFileResponse[number], err)
+	return offset, fmt.Errorf("%T read field %d '%s' error: %s", x, number, fieldIDToName_SubmitResponse[number], err)
 }
 
-func (x *SubmitFileResponse) fastReadField1(buf []byte, _type int8) (offset int, err error) {
-	x.Message, offset, err = fastpb.ReadString(buf, _type)
+func (x *SubmitResponse) fastReadField1(buf []byte, _type int8) (offset int, err error) {
+	x.Code, offset, err = fastpb.ReadUint32(buf, _type)
 	return offset, err
 }
 
-func (x *SubmitFileResponse) fastReadField2(buf []byte, _type int8) (offset int, err error) {
-	x.Status, offset, err = fastpb.ReadUint32(buf, _type)
+func (x *SubmitResponse) fastReadField2(buf []byte, _type int8) (offset int, err error) {
+	x.Msg, offset, err = fastpb.ReadString(buf, _type)
 	return offset, err
 }
 
-func (x *SubmitFileRequest) FastWrite(buf []byte) (offset int) {
+func (x *SubmitResponse) fastReadField3(buf []byte, _type int8) (offset int, err error) {
+	x.SubmitId, offset, err = fastpb.ReadString(buf, _type)
+	return offset, err
+}
+
+func (x *SubmitRequest) FastWrite(buf []byte) (offset int) {
 	if x == nil {
 		return offset
 	}
@@ -91,48 +101,57 @@ func (x *SubmitFileRequest) FastWrite(buf []byte) (offset int) {
 	return offset
 }
 
-func (x *SubmitFileRequest) fastWriteField1(buf []byte) (offset int) {
-	if x.Filename == "" {
+func (x *SubmitRequest) fastWriteField1(buf []byte) (offset int) {
+	if x.TeamId == "" {
 		return offset
 	}
-	offset += fastpb.WriteString(buf[offset:], 1, x.GetFilename())
+	offset += fastpb.WriteString(buf[offset:], 1, x.GetTeamId())
 	return offset
 }
 
-func (x *SubmitFileRequest) fastWriteField2(buf []byte) (offset int) {
-	if len(x.Data) == 0 {
+func (x *SubmitRequest) fastWriteField2(buf []byte) (offset int) {
+	if len(x.File) == 0 {
 		return offset
 	}
-	offset += fastpb.WriteBytes(buf[offset:], 2, x.GetData())
+	offset += fastpb.WriteBytes(buf[offset:], 2, x.GetFile())
 	return offset
 }
 
-func (x *SubmitFileResponse) FastWrite(buf []byte) (offset int) {
+func (x *SubmitResponse) FastWrite(buf []byte) (offset int) {
 	if x == nil {
 		return offset
 	}
 	offset += x.fastWriteField1(buf[offset:])
 	offset += x.fastWriteField2(buf[offset:])
+	offset += x.fastWriteField3(buf[offset:])
 	return offset
 }
 
-func (x *SubmitFileResponse) fastWriteField1(buf []byte) (offset int) {
-	if x.Message == "" {
+func (x *SubmitResponse) fastWriteField1(buf []byte) (offset int) {
+	if x.Code == 0 {
 		return offset
 	}
-	offset += fastpb.WriteString(buf[offset:], 1, x.GetMessage())
+	offset += fastpb.WriteUint32(buf[offset:], 1, x.GetCode())
 	return offset
 }
 
-func (x *SubmitFileResponse) fastWriteField2(buf []byte) (offset int) {
-	if x.Status == 0 {
+func (x *SubmitResponse) fastWriteField2(buf []byte) (offset int) {
+	if x.Msg == "" {
 		return offset
 	}
-	offset += fastpb.WriteUint32(buf[offset:], 2, x.GetStatus())
+	offset += fastpb.WriteString(buf[offset:], 2, x.GetMsg())
 	return offset
 }
 
-func (x *SubmitFileRequest) Size() (n int) {
+func (x *SubmitResponse) fastWriteField3(buf []byte) (offset int) {
+	if x.SubmitId == "" {
+		return offset
+	}
+	offset += fastpb.WriteString(buf[offset:], 3, x.GetSubmitId())
+	return offset
+}
+
+func (x *SubmitRequest) Size() (n int) {
 	if x == nil {
 		return n
 	}
@@ -141,53 +160,63 @@ func (x *SubmitFileRequest) Size() (n int) {
 	return n
 }
 
-func (x *SubmitFileRequest) sizeField1() (n int) {
-	if x.Filename == "" {
+func (x *SubmitRequest) sizeField1() (n int) {
+	if x.TeamId == "" {
 		return n
 	}
-	n += fastpb.SizeString(1, x.GetFilename())
+	n += fastpb.SizeString(1, x.GetTeamId())
 	return n
 }
 
-func (x *SubmitFileRequest) sizeField2() (n int) {
-	if len(x.Data) == 0 {
+func (x *SubmitRequest) sizeField2() (n int) {
+	if len(x.File) == 0 {
 		return n
 	}
-	n += fastpb.SizeBytes(2, x.GetData())
+	n += fastpb.SizeBytes(2, x.GetFile())
 	return n
 }
 
-func (x *SubmitFileResponse) Size() (n int) {
+func (x *SubmitResponse) Size() (n int) {
 	if x == nil {
 		return n
 	}
 	n += x.sizeField1()
 	n += x.sizeField2()
+	n += x.sizeField3()
 	return n
 }
 
-func (x *SubmitFileResponse) sizeField1() (n int) {
-	if x.Message == "" {
+func (x *SubmitResponse) sizeField1() (n int) {
+	if x.Code == 0 {
 		return n
 	}
-	n += fastpb.SizeString(1, x.GetMessage())
+	n += fastpb.SizeUint32(1, x.GetCode())
 	return n
 }
 
-func (x *SubmitFileResponse) sizeField2() (n int) {
-	if x.Status == 0 {
+func (x *SubmitResponse) sizeField2() (n int) {
+	if x.Msg == "" {
 		return n
 	}
-	n += fastpb.SizeUint32(2, x.GetStatus())
+	n += fastpb.SizeString(2, x.GetMsg())
 	return n
 }
 
-var fieldIDToName_SubmitFileRequest = map[int32]string{
-	1: "Filename",
-	2: "Data",
+func (x *SubmitResponse) sizeField3() (n int) {
+	if x.SubmitId == "" {
+		return n
+	}
+	n += fastpb.SizeString(3, x.GetSubmitId())
+	return n
 }
 
-var fieldIDToName_SubmitFileResponse = map[int32]string{
-	1: "Message",
-	2: "Status",
+var fieldIDToName_SubmitRequest = map[int32]string{
+	1: "TeamId",
+	2: "File",
+}
+
+var fieldIDToName_SubmitResponse = map[int32]string{
+	1: "Code",
+	2: "Msg",
+	3: "SubmitId",
 }

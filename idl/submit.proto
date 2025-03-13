@@ -9,14 +9,20 @@ package submit;
 option go_package = "/submit";
 
 service Submit {
-    rpc SubmitFile(SubmitFileRequest) returns (SubmitFileResponse) ;
-}
-message SubmitFileRequest {
-    string filename = 1;
-    bytes data = 2;
+    rpc Submit(SubmitRequest) returns (SubmitResponse) ;
 }
 
-message SubmitFileResponse {
-    string message = 1;
-    uint32 status = 2;
+
+message SubmitRequest {
+    string team_id = 1;
+    bytes file = 2 ;
 }
+
+message SubmitResponse {
+    uint32 code = 1;
+    string msg = 2;
+    string submit_id = 3;
+}
+
+
+

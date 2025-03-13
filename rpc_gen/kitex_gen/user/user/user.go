@@ -22,6 +22,20 @@ var serviceMethods = map[string]kitex.MethodInfo{
 		false,
 		kitex.WithStreamingMode(kitex.StreamingUnary),
 	),
+	"Register": kitex.NewMethodInfo(
+		registerHandler,
+		newRegisterArgs,
+		newRegisterResult,
+		false,
+		kitex.WithStreamingMode(kitex.StreamingUnary),
+	),
+	"GetTeamInfo": kitex.NewMethodInfo(
+		getTeamInfoHandler,
+		newGetTeamInfoArgs,
+		newGetTeamInfoResult,
+		false,
+		kitex.WithStreamingMode(kitex.StreamingUnary),
+	),
 }
 
 var (
@@ -241,6 +255,312 @@ func (p *LoginResult) GetResult() interface{} {
 	return p.Success
 }
 
+func registerHandler(ctx context.Context, handler interface{}, arg, result interface{}) error {
+	switch s := arg.(type) {
+	case *streaming.Args:
+		st := s.Stream
+		req := new(user.RegisterRequest)
+		if err := st.RecvMsg(req); err != nil {
+			return err
+		}
+		resp, err := handler.(user.User).Register(ctx, req)
+		if err != nil {
+			return err
+		}
+		return st.SendMsg(resp)
+	case *RegisterArgs:
+		success, err := handler.(user.User).Register(ctx, s.Req)
+		if err != nil {
+			return err
+		}
+		realResult := result.(*RegisterResult)
+		realResult.Success = success
+		return nil
+	default:
+		return errInvalidMessageType
+	}
+}
+func newRegisterArgs() interface{} {
+	return &RegisterArgs{}
+}
+
+func newRegisterResult() interface{} {
+	return &RegisterResult{}
+}
+
+type RegisterArgs struct {
+	Req *user.RegisterRequest
+}
+
+func (p *RegisterArgs) FastRead(buf []byte, _type int8, number int32) (n int, err error) {
+	if !p.IsSetReq() {
+		p.Req = new(user.RegisterRequest)
+	}
+	return p.Req.FastRead(buf, _type, number)
+}
+
+func (p *RegisterArgs) FastWrite(buf []byte) (n int) {
+	if !p.IsSetReq() {
+		return 0
+	}
+	return p.Req.FastWrite(buf)
+}
+
+func (p *RegisterArgs) Size() (n int) {
+	if !p.IsSetReq() {
+		return 0
+	}
+	return p.Req.Size()
+}
+
+func (p *RegisterArgs) Marshal(out []byte) ([]byte, error) {
+	if !p.IsSetReq() {
+		return out, nil
+	}
+	return proto.Marshal(p.Req)
+}
+
+func (p *RegisterArgs) Unmarshal(in []byte) error {
+	msg := new(user.RegisterRequest)
+	if err := proto.Unmarshal(in, msg); err != nil {
+		return err
+	}
+	p.Req = msg
+	return nil
+}
+
+var RegisterArgs_Req_DEFAULT *user.RegisterRequest
+
+func (p *RegisterArgs) GetReq() *user.RegisterRequest {
+	if !p.IsSetReq() {
+		return RegisterArgs_Req_DEFAULT
+	}
+	return p.Req
+}
+
+func (p *RegisterArgs) IsSetReq() bool {
+	return p.Req != nil
+}
+
+func (p *RegisterArgs) GetFirstArgument() interface{} {
+	return p.Req
+}
+
+type RegisterResult struct {
+	Success *user.RegisterResponse
+}
+
+var RegisterResult_Success_DEFAULT *user.RegisterResponse
+
+func (p *RegisterResult) FastRead(buf []byte, _type int8, number int32) (n int, err error) {
+	if !p.IsSetSuccess() {
+		p.Success = new(user.RegisterResponse)
+	}
+	return p.Success.FastRead(buf, _type, number)
+}
+
+func (p *RegisterResult) FastWrite(buf []byte) (n int) {
+	if !p.IsSetSuccess() {
+		return 0
+	}
+	return p.Success.FastWrite(buf)
+}
+
+func (p *RegisterResult) Size() (n int) {
+	if !p.IsSetSuccess() {
+		return 0
+	}
+	return p.Success.Size()
+}
+
+func (p *RegisterResult) Marshal(out []byte) ([]byte, error) {
+	if !p.IsSetSuccess() {
+		return out, nil
+	}
+	return proto.Marshal(p.Success)
+}
+
+func (p *RegisterResult) Unmarshal(in []byte) error {
+	msg := new(user.RegisterResponse)
+	if err := proto.Unmarshal(in, msg); err != nil {
+		return err
+	}
+	p.Success = msg
+	return nil
+}
+
+func (p *RegisterResult) GetSuccess() *user.RegisterResponse {
+	if !p.IsSetSuccess() {
+		return RegisterResult_Success_DEFAULT
+	}
+	return p.Success
+}
+
+func (p *RegisterResult) SetSuccess(x interface{}) {
+	p.Success = x.(*user.RegisterResponse)
+}
+
+func (p *RegisterResult) IsSetSuccess() bool {
+	return p.Success != nil
+}
+
+func (p *RegisterResult) GetResult() interface{} {
+	return p.Success
+}
+
+func getTeamInfoHandler(ctx context.Context, handler interface{}, arg, result interface{}) error {
+	switch s := arg.(type) {
+	case *streaming.Args:
+		st := s.Stream
+		req := new(user.GetTeamInfoRequst)
+		if err := st.RecvMsg(req); err != nil {
+			return err
+		}
+		resp, err := handler.(user.User).GetTeamInfo(ctx, req)
+		if err != nil {
+			return err
+		}
+		return st.SendMsg(resp)
+	case *GetTeamInfoArgs:
+		success, err := handler.(user.User).GetTeamInfo(ctx, s.Req)
+		if err != nil {
+			return err
+		}
+		realResult := result.(*GetTeamInfoResult)
+		realResult.Success = success
+		return nil
+	default:
+		return errInvalidMessageType
+	}
+}
+func newGetTeamInfoArgs() interface{} {
+	return &GetTeamInfoArgs{}
+}
+
+func newGetTeamInfoResult() interface{} {
+	return &GetTeamInfoResult{}
+}
+
+type GetTeamInfoArgs struct {
+	Req *user.GetTeamInfoRequst
+}
+
+func (p *GetTeamInfoArgs) FastRead(buf []byte, _type int8, number int32) (n int, err error) {
+	if !p.IsSetReq() {
+		p.Req = new(user.GetTeamInfoRequst)
+	}
+	return p.Req.FastRead(buf, _type, number)
+}
+
+func (p *GetTeamInfoArgs) FastWrite(buf []byte) (n int) {
+	if !p.IsSetReq() {
+		return 0
+	}
+	return p.Req.FastWrite(buf)
+}
+
+func (p *GetTeamInfoArgs) Size() (n int) {
+	if !p.IsSetReq() {
+		return 0
+	}
+	return p.Req.Size()
+}
+
+func (p *GetTeamInfoArgs) Marshal(out []byte) ([]byte, error) {
+	if !p.IsSetReq() {
+		return out, nil
+	}
+	return proto.Marshal(p.Req)
+}
+
+func (p *GetTeamInfoArgs) Unmarshal(in []byte) error {
+	msg := new(user.GetTeamInfoRequst)
+	if err := proto.Unmarshal(in, msg); err != nil {
+		return err
+	}
+	p.Req = msg
+	return nil
+}
+
+var GetTeamInfoArgs_Req_DEFAULT *user.GetTeamInfoRequst
+
+func (p *GetTeamInfoArgs) GetReq() *user.GetTeamInfoRequst {
+	if !p.IsSetReq() {
+		return GetTeamInfoArgs_Req_DEFAULT
+	}
+	return p.Req
+}
+
+func (p *GetTeamInfoArgs) IsSetReq() bool {
+	return p.Req != nil
+}
+
+func (p *GetTeamInfoArgs) GetFirstArgument() interface{} {
+	return p.Req
+}
+
+type GetTeamInfoResult struct {
+	Success *user.TeamInfo
+}
+
+var GetTeamInfoResult_Success_DEFAULT *user.TeamInfo
+
+func (p *GetTeamInfoResult) FastRead(buf []byte, _type int8, number int32) (n int, err error) {
+	if !p.IsSetSuccess() {
+		p.Success = new(user.TeamInfo)
+	}
+	return p.Success.FastRead(buf, _type, number)
+}
+
+func (p *GetTeamInfoResult) FastWrite(buf []byte) (n int) {
+	if !p.IsSetSuccess() {
+		return 0
+	}
+	return p.Success.FastWrite(buf)
+}
+
+func (p *GetTeamInfoResult) Size() (n int) {
+	if !p.IsSetSuccess() {
+		return 0
+	}
+	return p.Success.Size()
+}
+
+func (p *GetTeamInfoResult) Marshal(out []byte) ([]byte, error) {
+	if !p.IsSetSuccess() {
+		return out, nil
+	}
+	return proto.Marshal(p.Success)
+}
+
+func (p *GetTeamInfoResult) Unmarshal(in []byte) error {
+	msg := new(user.TeamInfo)
+	if err := proto.Unmarshal(in, msg); err != nil {
+		return err
+	}
+	p.Success = msg
+	return nil
+}
+
+func (p *GetTeamInfoResult) GetSuccess() *user.TeamInfo {
+	if !p.IsSetSuccess() {
+		return GetTeamInfoResult_Success_DEFAULT
+	}
+	return p.Success
+}
+
+func (p *GetTeamInfoResult) SetSuccess(x interface{}) {
+	p.Success = x.(*user.TeamInfo)
+}
+
+func (p *GetTeamInfoResult) IsSetSuccess() bool {
+	return p.Success != nil
+}
+
+func (p *GetTeamInfoResult) GetResult() interface{} {
+	return p.Success
+}
+
 type kClient struct {
 	c client.Client
 }
@@ -256,6 +576,26 @@ func (p *kClient) Login(ctx context.Context, Req *user.LoginRequest) (r *user.Lo
 	_args.Req = Req
 	var _result LoginResult
 	if err = p.c.Call(ctx, "Login", &_args, &_result); err != nil {
+		return
+	}
+	return _result.GetSuccess(), nil
+}
+
+func (p *kClient) Register(ctx context.Context, Req *user.RegisterRequest) (r *user.RegisterResponse, err error) {
+	var _args RegisterArgs
+	_args.Req = Req
+	var _result RegisterResult
+	if err = p.c.Call(ctx, "Register", &_args, &_result); err != nil {
+		return
+	}
+	return _result.GetSuccess(), nil
+}
+
+func (p *kClient) GetTeamInfo(ctx context.Context, Req *user.GetTeamInfoRequst) (r *user.TeamInfo, err error) {
+	var _args GetTeamInfoArgs
+	_args.Req = Req
+	var _result GetTeamInfoResult
+	if err = p.c.Call(ctx, "GetTeamInfo", &_args, &_result); err != nil {
 		return
 	}
 	return _result.GetSuccess(), nil

@@ -15,10 +15,17 @@ import (
 var errInvalidMessageType = errors.New("invalid message type for service method handler")
 
 var serviceMethods = map[string]kitex.MethodInfo{
-	"Board": kitex.NewMethodInfo(
-		boardHandler,
-		newBoardArgs,
-		newBoardResult,
+	"GetBoard": kitex.NewMethodInfo(
+		getBoardHandler,
+		newGetBoardArgs,
+		newGetBoardResult,
+		false,
+		kitex.WithStreamingMode(kitex.StreamingUnary),
+	),
+	"AppendJudgeResult": kitex.NewMethodInfo(
+		appendJudgeResultHandler,
+		newAppendJudgeResultArgs,
+		newAppendJudgeResultResult,
 		false,
 		kitex.WithStreamingMode(kitex.StreamingUnary),
 	),
@@ -88,73 +95,73 @@ func newServiceInfo(hasStreaming bool, keepStreamingMethods bool, keepNonStreami
 	return svcInfo
 }
 
-func boardHandler(ctx context.Context, handler interface{}, arg, result interface{}) error {
+func getBoardHandler(ctx context.Context, handler interface{}, arg, result interface{}) error {
 	switch s := arg.(type) {
 	case *streaming.Args:
 		st := s.Stream
-		req := new(board.BoardRequest)
+		req := new(board.GetBoardRequest)
 		if err := st.RecvMsg(req); err != nil {
 			return err
 		}
-		resp, err := handler.(board.Board).Board(ctx, req)
+		resp, err := handler.(board.Board).GetBoard(ctx, req)
 		if err != nil {
 			return err
 		}
 		return st.SendMsg(resp)
-	case *BoardArgs:
-		success, err := handler.(board.Board).Board(ctx, s.Req)
+	case *GetBoardArgs:
+		success, err := handler.(board.Board).GetBoard(ctx, s.Req)
 		if err != nil {
 			return err
 		}
-		realResult := result.(*BoardResult)
+		realResult := result.(*GetBoardResult)
 		realResult.Success = success
 		return nil
 	default:
 		return errInvalidMessageType
 	}
 }
-func newBoardArgs() interface{} {
-	return &BoardArgs{}
+func newGetBoardArgs() interface{} {
+	return &GetBoardArgs{}
 }
 
-func newBoardResult() interface{} {
-	return &BoardResult{}
+func newGetBoardResult() interface{} {
+	return &GetBoardResult{}
 }
 
-type BoardArgs struct {
-	Req *board.BoardRequest
+type GetBoardArgs struct {
+	Req *board.GetBoardRequest
 }
 
-func (p *BoardArgs) FastRead(buf []byte, _type int8, number int32) (n int, err error) {
+func (p *GetBoardArgs) FastRead(buf []byte, _type int8, number int32) (n int, err error) {
 	if !p.IsSetReq() {
-		p.Req = new(board.BoardRequest)
+		p.Req = new(board.GetBoardRequest)
 	}
 	return p.Req.FastRead(buf, _type, number)
 }
 
-func (p *BoardArgs) FastWrite(buf []byte) (n int) {
+func (p *GetBoardArgs) FastWrite(buf []byte) (n int) {
 	if !p.IsSetReq() {
 		return 0
 	}
 	return p.Req.FastWrite(buf)
 }
 
-func (p *BoardArgs) Size() (n int) {
+func (p *GetBoardArgs) Size() (n int) {
 	if !p.IsSetReq() {
 		return 0
 	}
 	return p.Req.Size()
 }
 
-func (p *BoardArgs) Marshal(out []byte) ([]byte, error) {
+func (p *GetBoardArgs) Marshal(out []byte) ([]byte, error) {
 	if !p.IsSetReq() {
 		return out, nil
 	}
 	return proto.Marshal(p.Req)
 }
 
-func (p *BoardArgs) Unmarshal(in []byte) error {
-	msg := new(board.BoardRequest)
+func (p *GetBoardArgs) Unmarshal(in []byte) error {
+	msg := new(board.GetBoardRequest)
 	if err := proto.Unmarshal(in, msg); err != nil {
 		return err
 	}
@@ -162,59 +169,59 @@ func (p *BoardArgs) Unmarshal(in []byte) error {
 	return nil
 }
 
-var BoardArgs_Req_DEFAULT *board.BoardRequest
+var GetBoardArgs_Req_DEFAULT *board.GetBoardRequest
 
-func (p *BoardArgs) GetReq() *board.BoardRequest {
+func (p *GetBoardArgs) GetReq() *board.GetBoardRequest {
 	if !p.IsSetReq() {
-		return BoardArgs_Req_DEFAULT
+		return GetBoardArgs_Req_DEFAULT
 	}
 	return p.Req
 }
 
-func (p *BoardArgs) IsSetReq() bool {
+func (p *GetBoardArgs) IsSetReq() bool {
 	return p.Req != nil
 }
 
-func (p *BoardArgs) GetFirstArgument() interface{} {
+func (p *GetBoardArgs) GetFirstArgument() interface{} {
 	return p.Req
 }
 
-type BoardResult struct {
-	Success *board.BoardResponse
+type GetBoardResult struct {
+	Success *board.GetBoardResponse
 }
 
-var BoardResult_Success_DEFAULT *board.BoardResponse
+var GetBoardResult_Success_DEFAULT *board.GetBoardResponse
 
-func (p *BoardResult) FastRead(buf []byte, _type int8, number int32) (n int, err error) {
+func (p *GetBoardResult) FastRead(buf []byte, _type int8, number int32) (n int, err error) {
 	if !p.IsSetSuccess() {
-		p.Success = new(board.BoardResponse)
+		p.Success = new(board.GetBoardResponse)
 	}
 	return p.Success.FastRead(buf, _type, number)
 }
 
-func (p *BoardResult) FastWrite(buf []byte) (n int) {
+func (p *GetBoardResult) FastWrite(buf []byte) (n int) {
 	if !p.IsSetSuccess() {
 		return 0
 	}
 	return p.Success.FastWrite(buf)
 }
 
-func (p *BoardResult) Size() (n int) {
+func (p *GetBoardResult) Size() (n int) {
 	if !p.IsSetSuccess() {
 		return 0
 	}
 	return p.Success.Size()
 }
 
-func (p *BoardResult) Marshal(out []byte) ([]byte, error) {
+func (p *GetBoardResult) Marshal(out []byte) ([]byte, error) {
 	if !p.IsSetSuccess() {
 		return out, nil
 	}
 	return proto.Marshal(p.Success)
 }
 
-func (p *BoardResult) Unmarshal(in []byte) error {
-	msg := new(board.BoardResponse)
+func (p *GetBoardResult) Unmarshal(in []byte) error {
+	msg := new(board.GetBoardResponse)
 	if err := proto.Unmarshal(in, msg); err != nil {
 		return err
 	}
@@ -222,22 +229,175 @@ func (p *BoardResult) Unmarshal(in []byte) error {
 	return nil
 }
 
-func (p *BoardResult) GetSuccess() *board.BoardResponse {
+func (p *GetBoardResult) GetSuccess() *board.GetBoardResponse {
 	if !p.IsSetSuccess() {
-		return BoardResult_Success_DEFAULT
+		return GetBoardResult_Success_DEFAULT
 	}
 	return p.Success
 }
 
-func (p *BoardResult) SetSuccess(x interface{}) {
-	p.Success = x.(*board.BoardResponse)
+func (p *GetBoardResult) SetSuccess(x interface{}) {
+	p.Success = x.(*board.GetBoardResponse)
 }
 
-func (p *BoardResult) IsSetSuccess() bool {
+func (p *GetBoardResult) IsSetSuccess() bool {
 	return p.Success != nil
 }
 
-func (p *BoardResult) GetResult() interface{} {
+func (p *GetBoardResult) GetResult() interface{} {
+	return p.Success
+}
+
+func appendJudgeResultHandler(ctx context.Context, handler interface{}, arg, result interface{}) error {
+	switch s := arg.(type) {
+	case *streaming.Args:
+		st := s.Stream
+		req := new(board.AppendJudgeResultRequest)
+		if err := st.RecvMsg(req); err != nil {
+			return err
+		}
+		resp, err := handler.(board.Board).AppendJudgeResult(ctx, req)
+		if err != nil {
+			return err
+		}
+		return st.SendMsg(resp)
+	case *AppendJudgeResultArgs:
+		success, err := handler.(board.Board).AppendJudgeResult(ctx, s.Req)
+		if err != nil {
+			return err
+		}
+		realResult := result.(*AppendJudgeResultResult)
+		realResult.Success = success
+		return nil
+	default:
+		return errInvalidMessageType
+	}
+}
+func newAppendJudgeResultArgs() interface{} {
+	return &AppendJudgeResultArgs{}
+}
+
+func newAppendJudgeResultResult() interface{} {
+	return &AppendJudgeResultResult{}
+}
+
+type AppendJudgeResultArgs struct {
+	Req *board.AppendJudgeResultRequest
+}
+
+func (p *AppendJudgeResultArgs) FastRead(buf []byte, _type int8, number int32) (n int, err error) {
+	if !p.IsSetReq() {
+		p.Req = new(board.AppendJudgeResultRequest)
+	}
+	return p.Req.FastRead(buf, _type, number)
+}
+
+func (p *AppendJudgeResultArgs) FastWrite(buf []byte) (n int) {
+	if !p.IsSetReq() {
+		return 0
+	}
+	return p.Req.FastWrite(buf)
+}
+
+func (p *AppendJudgeResultArgs) Size() (n int) {
+	if !p.IsSetReq() {
+		return 0
+	}
+	return p.Req.Size()
+}
+
+func (p *AppendJudgeResultArgs) Marshal(out []byte) ([]byte, error) {
+	if !p.IsSetReq() {
+		return out, nil
+	}
+	return proto.Marshal(p.Req)
+}
+
+func (p *AppendJudgeResultArgs) Unmarshal(in []byte) error {
+	msg := new(board.AppendJudgeResultRequest)
+	if err := proto.Unmarshal(in, msg); err != nil {
+		return err
+	}
+	p.Req = msg
+	return nil
+}
+
+var AppendJudgeResultArgs_Req_DEFAULT *board.AppendJudgeResultRequest
+
+func (p *AppendJudgeResultArgs) GetReq() *board.AppendJudgeResultRequest {
+	if !p.IsSetReq() {
+		return AppendJudgeResultArgs_Req_DEFAULT
+	}
+	return p.Req
+}
+
+func (p *AppendJudgeResultArgs) IsSetReq() bool {
+	return p.Req != nil
+}
+
+func (p *AppendJudgeResultArgs) GetFirstArgument() interface{} {
+	return p.Req
+}
+
+type AppendJudgeResultResult struct {
+	Success *board.AppendJudgeResultResponse
+}
+
+var AppendJudgeResultResult_Success_DEFAULT *board.AppendJudgeResultResponse
+
+func (p *AppendJudgeResultResult) FastRead(buf []byte, _type int8, number int32) (n int, err error) {
+	if !p.IsSetSuccess() {
+		p.Success = new(board.AppendJudgeResultResponse)
+	}
+	return p.Success.FastRead(buf, _type, number)
+}
+
+func (p *AppendJudgeResultResult) FastWrite(buf []byte) (n int) {
+	if !p.IsSetSuccess() {
+		return 0
+	}
+	return p.Success.FastWrite(buf)
+}
+
+func (p *AppendJudgeResultResult) Size() (n int) {
+	if !p.IsSetSuccess() {
+		return 0
+	}
+	return p.Success.Size()
+}
+
+func (p *AppendJudgeResultResult) Marshal(out []byte) ([]byte, error) {
+	if !p.IsSetSuccess() {
+		return out, nil
+	}
+	return proto.Marshal(p.Success)
+}
+
+func (p *AppendJudgeResultResult) Unmarshal(in []byte) error {
+	msg := new(board.AppendJudgeResultResponse)
+	if err := proto.Unmarshal(in, msg); err != nil {
+		return err
+	}
+	p.Success = msg
+	return nil
+}
+
+func (p *AppendJudgeResultResult) GetSuccess() *board.AppendJudgeResultResponse {
+	if !p.IsSetSuccess() {
+		return AppendJudgeResultResult_Success_DEFAULT
+	}
+	return p.Success
+}
+
+func (p *AppendJudgeResultResult) SetSuccess(x interface{}) {
+	p.Success = x.(*board.AppendJudgeResultResponse)
+}
+
+func (p *AppendJudgeResultResult) IsSetSuccess() bool {
+	return p.Success != nil
+}
+
+func (p *AppendJudgeResultResult) GetResult() interface{} {
 	return p.Success
 }
 
@@ -251,11 +411,21 @@ func newServiceClient(c client.Client) *kClient {
 	}
 }
 
-func (p *kClient) Board(ctx context.Context, Req *board.BoardRequest) (r *board.BoardResponse, err error) {
-	var _args BoardArgs
+func (p *kClient) GetBoard(ctx context.Context, Req *board.GetBoardRequest) (r *board.GetBoardResponse, err error) {
+	var _args GetBoardArgs
 	_args.Req = Req
-	var _result BoardResult
-	if err = p.c.Call(ctx, "Board", &_args, &_result); err != nil {
+	var _result GetBoardResult
+	if err = p.c.Call(ctx, "GetBoard", &_args, &_result); err != nil {
+		return
+	}
+	return _result.GetSuccess(), nil
+}
+
+func (p *kClient) AppendJudgeResult(ctx context.Context, Req *board.AppendJudgeResultRequest) (r *board.AppendJudgeResultResponse, err error) {
+	var _args AppendJudgeResultArgs
+	_args.Req = Req
+	var _result AppendJudgeResultResult
+	if err = p.c.Call(ctx, "AppendJudgeResult", &_args, &_result); err != nil {
 		return
 	}
 	return _result.GetSuccess(), nil

@@ -1,22 +1,24 @@
 package main
 
 import (
-	"net"
-	"time"
+	"context"
+	"os"
 
 	"github.com/cloudwego/kitex/pkg/klog"
-	"github.com/cloudwego/kitex/pkg/rpcinfo"
 	"github.com/cloudwego/kitex/server"
+	"github.com/imag-er/wendingcup/app/submit/biz/dal"
 	"github.com/imag-er/wendingcup/app/submit/conf"
+	"github.com/imag-er/wendingcup/common"
 	"github.com/imag-er/wendingcup/rpc_gen/kitex_gen/submit/submit"
 	kitexlogrus "github.com/kitex-contrib/obs-opentelemetry/logging/logrus"
-	"go.uber.org/zap/zapcore"
-	"gopkg.in/natefinch/lumberjack.v2"
 )
 
 func main() {
+	
+	p := common.InitTracing(conf.GetConf().Kitex.Service)
+	defer p.Shutdown(context.Background())	
 	opts := kitexInit()
-
+	dal.Init()
 	svr := submit.NewServer(new(SubmitImpl), opts...)
 
 	err := svr.Run()
@@ -27,33 +29,19 @@ func main() {
 
 func kitexInit() (opts []server.Option) {
 	// address
-	addr, err := net.ResolveTCPAddr("tcp", conf.GetConf().Kitex.Address)
-	if err != nil {
-		panic(err)
-	}
-	opts = append(opts, server.WithServiceAddr(addr))
-
-	// service info
-	opts = append(opts, server.WithServerBasicInfo(&rpcinfo.EndpointBasicInfo{
-		ServiceName: conf.GetConf().Kitex.Service,
-	}))
+	opts = append(opts, server.WithSuite(
+		common.CommonServerSuite{
+			CurrentServiceName: conf.GetConf().Kitex.Service,
+			RegistryAddr:       conf.GetConf().Registry.RegistryAddress[0],
+		},
+	))
 
 	// klog
 	logger := kitexlogrus.NewLogger()
 	klog.SetLogger(logger)
 	klog.SetLevel(conf.LogLevel())
-	asyncWriter := &zapcore.BufferedWriteSyncer{
-		WS: zapcore.AddSync(&lumberjack.Logger{
-			Filename:   conf.GetConf().Kitex.LogFileName,
-			MaxSize:    conf.GetConf().Kitex.LogMaxSize,
-			MaxBackups: conf.GetConf().Kitex.LogMaxBackups,
-			MaxAge:     conf.GetConf().Kitex.LogMaxAge,
-		}),
-		FlushInterval: time.Second,
-	}
-	klog.SetOutput(asyncWriter)
-	server.RegisterShutdownHook(func() {
-		asyncWriter.Sync()
-	})
+
+	klog.SetOutput(os.Stdout)
+
 	return
 }

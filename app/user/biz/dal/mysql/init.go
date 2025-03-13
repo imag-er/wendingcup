@@ -1,6 +1,7 @@
 package mysql
 
 import (
+	"github.com/imag-er/wendingcup/app/user/biz/dal/model"
 	"github.com/imag-er/wendingcup/app/user/conf"
 
 	"gorm.io/driver/mysql"
@@ -19,6 +20,11 @@ func Init() {
 			SkipDefaultTransaction: true,
 		},
 	)
+	if err != nil {
+		panic(err)
+	}
+
+	err := DB.AutoMigrate(&model.Team{},&model.Player{})
 	if err != nil {
 		panic(err)
 	}

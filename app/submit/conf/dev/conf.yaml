@@ -1,6 +1,6 @@
 kitex:
   service: "submit"
-  address: ":8889"
+  address: ":8888"
   log_level: info
   log_file_name: "log/kitex.log"
   log_max_size: 10
@@ -9,12 +9,12 @@ kitex:
 
 registry:
   registry_address:
-    - 127.0.0.1:8500
+    - 127.0.0.1:2379
   username: ""
   password: ""
 
 mysql:
-  dsn: "root:root@tcp(127.0.0.1:3306)/submit?charset=utf8mb4&parseTime=True&loc=Local"
+  dsn: "gorm:gorm@tcp(127.0.0.1:3306)/gorm?charset=utf8mb4&parseTime=True&loc=Local"
 
 redis:
   address: "127.0.0.1:6379"

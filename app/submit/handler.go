@@ -9,9 +9,9 @@ import (
 // SubmitImpl implements the last service interface defined in the IDL.
 type SubmitImpl struct{}
 
-// SubmitFile implements the SubmitImpl interface.
-func (s *SubmitImpl) SubmitFile(ctx context.Context, req *submit.SubmitFileRequest) (resp *submit.SubmitFileResponse, err error) {
-	resp, err = service.NewSubmitFileService(ctx).Run(req)
+// Submit implements the SubmitImpl interface.
+func (s *SubmitImpl) Submit(ctx context.Context, req *submit.SubmitRequest) (resp *submit.SubmitResponse, err error) {
+	resp, err = service.NewSubmitService(ctx).Run(req)
 
 	return resp, err
 }

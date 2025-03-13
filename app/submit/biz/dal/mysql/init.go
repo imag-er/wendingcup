@@ -1,6 +1,7 @@
 package mysql
 
 import (
+	"github.com/imag-er/wendingcup/app/submit/biz/dal/model"
 	"github.com/imag-er/wendingcup/app/submit/conf"
 
 	"gorm.io/driver/mysql"
@@ -22,4 +23,6 @@ func Init() {
 	if err != nil {
 		panic(err)
 	}
+
+	DB.AutoMigrate(&model.Submit{})
 }

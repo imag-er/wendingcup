@@ -4,10 +4,6 @@ go 1.23.4
 
 replace github.com/apache/thrift => github.com/apache/thrift v0.13.0
 
-replace github.com/imag-er/wendingcup/rpc_gen => ../../rpc_gen/
-
-replace github.com/imag-er/wendingcup/common => ../../common/
-
 require (
 	github.com/cloudwego/kitex v0.12.3
 	github.com/google/uuid v1.6.0
@@ -16,8 +12,6 @@ require (
 	github.com/kitex-contrib/obs-opentelemetry/logging/logrus v0.0.0-20241120035129-55da83caab1b
 	github.com/kr/pretty v0.3.1
 	github.com/redis/go-redis/v9 v9.7.1
-	go.uber.org/zap v1.27.0
-	gopkg.in/natefinch/lumberjack.v2 v2.2.1
 	gopkg.in/validator.v2 v2.0.1
 	gopkg.in/yaml.v2 v2.4.0
 	gorm.io/driver/mysql v1.5.7
@@ -108,3 +102,7 @@ require (
 	google.golang.org/protobuf v1.33.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )
+
+replace github.com/imag-er/wendingcup/rpc_gen => ../../rpc_gen/
+
+replace github.com/imag-er/wendingcup/common => ../../common/

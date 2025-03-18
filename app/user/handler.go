@@ -24,7 +24,7 @@ func (s *UserImpl) Register(ctx context.Context, req *user.RegisterRequest) (res
 }
 
 // GetTeamInfo implements the UserImpl interface.
-func (s *UserImpl) GetTeamInfo(ctx context.Context, req *user.GetTeamInfoRequst) (resp *user.TeamInfo, err error) {
+func (s *UserImpl) GetTeamInfo(ctx context.Context, req *user.GetTeamInfoRequest) (resp *user.GetTeamInfoResponse, err error) {
 	resp, err = service.NewGetTeamInfoService(ctx).Run(req)
 
 	return resp, err

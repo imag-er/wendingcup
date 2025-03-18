@@ -17,3 +17,10 @@ type Submit struct {
 	Status  string
 	Message string
 }
+
+type Result struct {
+	gorm.Model
+	
+	SubmitId uint
+	Score float32
+}

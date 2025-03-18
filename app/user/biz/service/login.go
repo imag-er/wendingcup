@@ -4,9 +4,10 @@ import (
 	"context"
 
 	"github.com/cloudwego/kitex/pkg/klog"
+	user "github.com/imag-er/wendingcup/rpc_gen/kitex_gen/user"
 	"github.com/imag-er/wendingcup/app/user/biz/dal/model"
 	"github.com/imag-er/wendingcup/app/user/biz/dal/mysql"
-	user "github.com/imag-er/wendingcup/rpc_gen/kitex_gen/user"
+
 )
 
 type LoginService struct {

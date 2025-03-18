@@ -13,6 +13,7 @@ import (
 	"github.com/cloudwego/hertz/pkg/protocol/consts"
 	"github.com/imag-er/wendingcup/app/api/handler"
 	"github.com/imag-er/wendingcup/app/api/infra"
+	"github.com/imag-er/wendingcup/app/api/mw"
 )
 
 func main() {
@@ -20,32 +21,34 @@ func main() {
 		server.WithHostPorts(conf.GetConf().Hertz.Address),
 	)
 	infra.Init()
-	infra.InitJWT()
+	mw.InitJWT()
+	h.Use(mw.RequestLog)
+	h.Use(mw.CORSMiddleware)
 
 	p := common.InitTracing(conf.GetConf().Hertz.Service)
 	defer p.Shutdown(context.Background())
 
 	h.GET("/", func(c context.Context, ctx *app.RequestContext) {
-		ctx.JSON(consts.StatusOK, utils.H{
-			"message": "Hello, World!",
-		})
+		ctx.JSON(consts.StatusOK, utils.H{"message": "Hello, World!"})
 	})
+
+	h.GET("/board", handler.BoardHandler)
+
+	h.GET("/ping", func(c context.Context, ctx *app.RequestContext) {
+		ctx.JSON(consts.StatusOK, utils.H{"message": "pong"})
+	})
+	h.POST("/login", mw.AuthMiddleware.LoginHandler)
+	h.POST("/register", handler.RegisterHandler)
+	h.POST("/logout", mw.AuthMiddleware.LogoutHandler)
+
 	auth := h.Group("auth")
-
-	auth.POST("/login", infra.AuthMiddleware.LoginHandler)
-	auth.POST("/register", handler.RegisterHandler)
-
-	auth.Use(infra.AuthMiddleware.MiddlewareFunc())
+	auth.Use(mw.AuthMiddleware.MiddlewareFunc())
 	{
-		auth.POST("/logout", infra.AuthMiddleware.LogoutHandler)
-		auth.POST("/refresh", infra.AuthMiddleware.RefreshHandler)
+		auth.GET("/teaminfo", handler.TeamInfoHandler)
+		auth.POST("/submit", mw.AuthMiddleware.MiddlewareFunc(), handler.SubmitHandler)
+		auth.POST("/refresh", mw.AuthMiddleware.RefreshHandler)
 	}
-	h.POST("/submit", infra.AuthMiddleware.MiddlewareFunc(), handler.SubmitHandler)
-	h.GET("/ping", infra.AuthMiddleware.MiddlewareFunc(), func(c context.Context, ctx *app.RequestContext) {
-		ctx.JSON(consts.StatusOK, utils.H{
-			"message": "pong",
-		})
-	})
+
 	// 启动服务器，监听8080端口
 	h.Spin()
 }

@@ -8,7 +8,7 @@ option go_package = "user";
 service User {
     rpc Login(LoginRequest) returns (LoginResponse) ;
     rpc Register(RegisterRequest) returns (RegisterResponse) ;
-    rpc GetTeamInfo(GetTeamInfoRequst) returns (TeamInfo) ;
+    rpc GetTeamInfo(GetTeamInfoRequest) returns (GetTeamInfoResponse) ;
 }
 
 message RegisterRequest {
@@ -46,6 +46,12 @@ message TeamInfo {
     repeated Player players = 3;
 }
 
-message GetTeamInfoRequst {
+message GetTeamInfoRequest {
     string team_id = 1;
+}
+
+message GetTeamInfoResponse {
+    uint32 code = 1;
+    string msg = 2;
+    TeamInfo teaminfo = 3;
 }

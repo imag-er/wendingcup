@@ -1,8 +1,0 @@
-{
-    "protoc": {
-        "options": [
-            "--proto_path=${workspaceFolder}/idl/",
-        ]
-    },
-    "makefile.configureOnOpen": false
-}

@@ -24,6 +24,7 @@ func (s *SubmitService) Run(req *submit.SubmitRequest) (resp *submit.SubmitRespo
 	// Finish your business logic.
 	klog.Infof("submit: %v", req)
 
+	// 创建提交记录
 	var val model.Submit
 	val = model.Submit{
 		TeamId:  req.TeamId,
@@ -36,14 +37,16 @@ func (s *SubmitService) Run(req *submit.SubmitRequest) (resp *submit.SubmitRespo
 		return nil, err
 	}
 
+	// 读取form内的文件
 	fileContent := req.File
-	klog.Info(fileContent)
+
 	// 获取模块根目录
 	moduleRoot, err := os.Getwd()
 	if err != nil {
 		return nil, err
 	}
-	// 构建 submit_files 文件夹路径
+
+	// 存入submit_file文件夹
 	submitFilesDir := filepath.Join(moduleRoot, "submit_files")
 	fileName := strconv.FormatUint(uint64(val.ID), 10)
 	filePath := filepath.Join(submitFilesDir, fileName)
@@ -52,8 +55,12 @@ func (s *SubmitService) Run(req *submit.SubmitRequest) (resp *submit.SubmitRespo
 	if err != nil {
 		return nil, err
 	}
+
 	resp = &submit.SubmitResponse{
+		Code: 0,
+		Msg: "上传成功,判题中",
 		SubmitId: fileName,
 	}
+	
 	return
 }

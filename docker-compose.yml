@@ -11,12 +11,11 @@ services:
       - "3306:3306"
     volumes:
       - ./db:/docker-entrypoint-initdb.d
-
   redis:
     image: redis:latest
     ports:
       - "6379:6379"
-    
+
   prometheus:
     image: prom/prometheus:latest
     volumes:
@@ -32,11 +31,4 @@ services:
       - "16686:16686" 
       - "4317:4317"
       - "4318:4318"
-  grafana:
-    image: grafana/grafana:latest
-    environment:
-      - GF_AUTH_ANONYMOUS_ENABLED=true
-      - GF_AUTH_ANONYMOUS_ORG_ROLE=Admin
-      - GF_AUTH_DISABLE_LOGIN_FORM=true
-    ports:
-      - "3000:3000"
+    

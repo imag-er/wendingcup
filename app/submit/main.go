@@ -8,15 +8,19 @@ import (
 	"github.com/cloudwego/kitex/server"
 	"github.com/imag-er/wendingcup/app/submit/biz/dal"
 	"github.com/imag-er/wendingcup/app/submit/conf"
+	"github.com/imag-er/wendingcup/app/submit/infra"
 	"github.com/imag-er/wendingcup/common"
 	"github.com/imag-er/wendingcup/rpc_gen/kitex_gen/submit/submit"
 	kitexlogrus "github.com/kitex-contrib/obs-opentelemetry/logging/logrus"
+	
 )
 
 func main() {
-	
 	p := common.InitTracing(conf.GetConf().Kitex.Service)
-	defer p.Shutdown(context.Background())	
+	defer p.Shutdown(context.Background())		
+	infra.InitMQ()
+	defer infra.Producer.GracefulStop()
+
 	opts := kitexInit()
 	dal.Init()
 	svr := submit.NewServer(new(SubmitImpl), opts...)

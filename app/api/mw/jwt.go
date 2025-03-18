@@ -1,4 +1,4 @@
-package infra
+package mw
 
 import (
 	"context"
@@ -10,7 +10,8 @@ import (
 	"github.com/cloudwego/hertz/pkg/app"
 	"github.com/cloudwego/hertz/pkg/common/hlog"
 	"github.com/hertz-contrib/jwt"
-	
+
+	"github.com/imag-er/wendingcup/app/api/infra"
 	user "github.com/imag-er/wendingcup/rpc_gen/kitex_gen/user"
 )
 
@@ -23,6 +24,7 @@ type loginPayload struct {
 
 func InitJWT() {
 	// the jwt middleware
+	var err error
 	AuthMiddleware, err = jwt.New(&jwt.HertzJWTMiddleware{
 		Realm:       "wending-jwt",
 		Key:         []byte("secret key"),
@@ -35,7 +37,7 @@ func InitJWT() {
 				return "", jwt.ErrMissingLoginValues
 			}
 			hlog.Infof("loginVals: %+v", loginVals)
-			resp, err := UserClient.Login(ctx, &user.LoginRequest{
+			resp, err := infra.UserClient.Login(ctx, &user.LoginRequest{
 				TeamId: loginVals.UUID,
 			})
 			if err != nil {

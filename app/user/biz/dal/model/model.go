@@ -1,19 +1,16 @@
 package model
-import (
-)
+
+import ()
 
 type Team struct {
-    UUID      string `gorm:"primarykey"`
-    TeamName  string
-    Players   []Player `gorm:"foreignKey:TeamUUID"`
+	UUID    string   `gorm:"type:varchar(36);primaryKey"`
+	Name    string   `gorm:"type:varchar(64);uniqueIndex;not null"`  // 显式指定类型
+	Players []Player `gorm:"foreignKey:TeamID"`
 }
 
 type Player struct {
-    ID         uint   `gorm:"primaryKey"`
-    Name       string
-    PhoneNumber string
-    StudentId  string
-    TeamUUID   string `gorm:"index;not null"` // 外键，指向Team的UUID
+    TeamID    string `gorm:"type:varchar(36);not null;"`
+	Name      string `gorm:"type:varchar(64);not null"`
+	Phone     string `gorm:"type:varchar(11);not null"`
+	StudentId string `gorm:"type:varchar(9);not null"`
 }
-
-

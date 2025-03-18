@@ -11,7 +11,7 @@ func TestGetTeamInfo_Run(t *testing.T) {
 	s := NewGetTeamInfoService(ctx)
 	// init req and assert value
 
-	req := &user.GetTeamInfoRequst{}
+	req := &user.GetTeamInfoRequest{}
 	resp, err := s.Run(req)
 	t.Logf("err: %v", err)
 	t.Logf("resp: %v", resp)

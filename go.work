@@ -4,4 +4,6 @@ use (
 	./app/api
 	./app/submit
 	./app/user
+	./lab/comsumer
+	./lab/producer
 )

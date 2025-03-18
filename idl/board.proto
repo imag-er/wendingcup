@@ -14,6 +14,8 @@ message GetBoardRequest {
     
 }
 message GetBoardResponse {
+    uint32 code = 1;
+    string msg = 2;
     repeated JudgeResult judge_result = 3;
 }
 

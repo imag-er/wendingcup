@@ -8,6 +8,7 @@ type Team struct {
 	Players []Player `gorm:"foreignKey:TeamID"`
 }
 
+
 type Player struct {
     TeamID    string `gorm:"type:varchar(36);not null;"`
 	Name      string `gorm:"type:varchar(64);not null"`

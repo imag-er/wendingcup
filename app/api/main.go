@@ -14,11 +14,13 @@ import (
 	"github.com/imag-er/wendingcup/app/api/handler"
 	"github.com/imag-er/wendingcup/app/api/infra"
 	"github.com/imag-er/wendingcup/app/api/mw"
+	
 )
 
 func main() {
 	h := server.New(
 		server.WithHostPorts(conf.GetConf().Hertz.Address),
+		server.WithMaxRequestBodySize(100*1024*1024), // 100 MB
 	)
 	infra.Init()
 	mw.InitJWT()
@@ -45,7 +47,10 @@ func main() {
 	auth.Use(mw.AuthMiddleware.MiddlewareFunc())
 	{
 		auth.GET("/teaminfo", handler.TeamInfoHandler)
-		auth.POST("/submit", mw.AuthMiddleware.MiddlewareFunc(), handler.SubmitHandler)
+		
+		auth.GET("/submit", handler.GetSubmitHandler)
+		auth.POST("/submit", handler.PostSubmitHandler)
+
 		auth.POST("/refresh", mw.AuthMiddleware.RefreshHandler)
 	}
 

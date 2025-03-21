@@ -51,7 +51,7 @@ submit_response = make_request('POST', 'http://localhost:8080/auth/submit',
                                headers={'Authorization': f'Bearer {token}'},
                                data={'team_id': team_id[0]},
                                files={
-                                   'file': ('example.txt', open('example.txt', 'rb'))}
+                                   'file': ('somename.zip', open('somename.zip', 'rb'))}
                                )
 print(submit_response)
 

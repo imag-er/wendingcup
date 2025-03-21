@@ -1,3 +1,5 @@
+
+
 syntax =  "proto3";
 
 package board;
@@ -28,6 +30,7 @@ message AppendJudgeResultResponse {
 
 message JudgeResult {
     string team_id = 1;
-    string submit_id = 2;
-    float score = 3;
+    string file_upload_time = 2;
+    string judge_result_time = 3;
+    float score = 4;
 }

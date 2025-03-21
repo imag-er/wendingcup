@@ -1,33 +1,40 @@
+import sys
 import requests
 from requests.exceptions import RequestException
 
-token = open('token.txt','r').read().strip()
+
+def make_request(url, data=None, json=None, headers=None, files=None):
+    print(f"{data=}")
+    try:
+        response = requests.post(
+            url, data=data, json=json, headers=headers, files=files)
+        response.raise_for_status()
+        return response.json()
+    except RequestException as e:
+        print("请求失败:", e)
+        sys.exit(1)
+
 
 # 构造表单数据
-data = {
-    'team_id': 'fc4a7d0e-bb15-489c-b008-435069fb5c6d'
-}
-files = {
-    'file': ('example.txt', open('example.txt', 'rb'))  # 使用元组格式 (filename, fileobj)
-}
+team_ids = [
+    line[:-1] for line in open('team_id.txt').readlines()
+]
 
-try:
-    response = requests.post(
-        'http://localhost:8080/submit',
-        data=data,
-        files=files,  # 现在包含正确的文件名和文件对象
-        headers={
-            'Authorization': 'Bearer ' + token
-        }
-    )
-    
-    if response.status_code == 200:
-        print('注册成功:', response.json())
-    else:
-        print(f'请求失败，状态码：{response.status_code}')
-        print('响应内容:', response.text)
+tokens = [
+    make_request('http://localhost:8080/login',
+                 data={'team_id': tid},
+                 headers={'Content-Type': 'application/x-www-form-urlencoded'})['token']
+    for tid in team_ids
+]
 
-except RequestException as e:
-    print(f'请求异常：{str(e)}')
-except Exception as e:
-    print(f'发生错误：{str(e)}')
+# 100个队伍，每个队伍提交两次
+for i in range(2):
+    for i in range(len(team_ids)):
+        submit_response = make_request('http://localhost:8080/auth/submit',
+                                    headers={
+                                        'Authorization': f'Bearer {tokens[i]}'},
+                                    data={'team_id': team_ids[i]},
+                                    files={
+                                        'file': ('somename.zip', open('somename.zip', 'rb'))}
+                                    )
+        print(submit_response)

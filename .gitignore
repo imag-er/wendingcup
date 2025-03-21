@@ -3,3 +3,6 @@ rpc_gen/*
 answer/
 .vscode/
 lab/
+db/*
+frontend/
+app/submit/submit_files/

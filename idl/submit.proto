@@ -9,7 +9,11 @@ package submit;
 option go_package = "/submit";
 
 service Submit {
+    // 提交文件, 参数为团队id和文件
     rpc Submit(SubmitRequest) returns (SubmitResponse) ;
+
+    // 获取提交列表, 参数为团队id
+    rpc GetSubmitList(GetSubmitListRequest) returns (GetSubmitListResponse) ;
 }
 
 
@@ -24,5 +28,18 @@ message SubmitResponse {
     string submit_id = 3;
 }
 
+message GetSubmitListRequest {
+    string team_id = 1;
+}
 
+message GetSubmitListResponse {
+    uint32 code = 1;
+    string msg = 2;
+    repeated SubmitInfo submit_list = 3;
+}
 
+message SubmitInfo {
+    string team_id = 2;
+    string time = 3;
+    string status = 4;
+}

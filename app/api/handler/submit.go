@@ -19,8 +19,7 @@ type SubmitRequest struct {
 	File   *multipart.FileHeader `form:"file"`
 }
 
-// 处理 Submit 请求的 handler
-func SubmitHandler(ctx context.Context, c *app.RequestContext) {
+func PostSubmitHandler(ctx context.Context, c *app.RequestContext) {
 	var req SubmitRequest
 	if err := c.BindAndValidate(&req); err != nil {
 		c.JSON(consts.StatusBadRequest, utils.H{"error": err.Error()})
@@ -52,4 +51,17 @@ func SubmitHandler(ctx context.Context, c *app.RequestContext) {
 		})
 	}
 
+}
+
+
+func GetSubmitHandler(ctx context.Context, c *app.RequestContext) {
+	teamId := c.Query("team_id")
+	resp, err := infra.SubmitClient.GetSubmitList(ctx, &submit.GetSubmitListRequest{
+		TeamId: teamId,
+	})
+	if apiutils.NotError(c, resp, err) {
+		c.JSON(consts.StatusOK, utils.H{
+			"submit_list": resp.SubmitList,
+		})
+	}
 }

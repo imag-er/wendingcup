@@ -16,6 +16,7 @@ func InitTracing(serviceName string) provider.OtelProvider {
 		provider.WithServiceName(serviceName),
 		provider.WithInsecure(),
 		provider.WithEnableMetrics(false),
+		provider.WithEnableTracing(true),
 		provider.WithExportEndpoint(entryPoint),
 	)
 	if p == nil {

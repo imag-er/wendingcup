@@ -23,8 +23,13 @@ type Config struct {
 	MySQL    MySQL    `yaml:"mysql"`
 	Redis    Redis    `yaml:"redis"`
 	Registry Registry `yaml:"registry"`
+	Judge    Judge    `yaml:"judge"`
 }
 
+type Judge struct {
+	JudgerAddress string `yaml:"judger_address"`
+	NumThreads    int    `yaml:"num_threads"`
+}
 type MySQL struct {
 	DSN string `yaml:"dsn"`
 }

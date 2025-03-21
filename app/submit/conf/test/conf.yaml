@@ -7,6 +7,10 @@ kitex:
   log_max_age: 3
   log_max_backups: 50
 
+judge:
+  judger_address: "localhost:8381"
+  num_threads: 10
+
 registry:
   registry_address:
     - 127.0.0.1:8500

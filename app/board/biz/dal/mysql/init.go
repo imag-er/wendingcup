@@ -2,7 +2,7 @@ package mysql
 
 import (
 	"github.com/imag-er/wendingcup/app/board/conf"
-
+	"github.com/imag-er/wendingcup/app/board/biz/dal/model"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 )
@@ -22,4 +22,13 @@ func Init() {
 	if err != nil {
 		panic(err)
 	}
+
+
+	// 自动迁移
+	err = DB.AutoMigrate(&model.Result{})
+	if err != nil {
+
+		panic(err)
+	}
+
 }

@@ -2,8 +2,8 @@ go 1.23.4
 
 use (
 	./app/api
+	./app/board
 	./app/submit
 	./app/user
-	./lab/comsumer
-	./lab/producer
+	./lab
 )

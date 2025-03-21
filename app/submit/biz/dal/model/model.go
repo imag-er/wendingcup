@@ -6,6 +6,7 @@ import (
 
 // 定义提交状态的枚举类型
 const (
+	StatusUploaded  string = "uploaded"
 	StatusPending   string = "pending"
 	StatusCompleted string = "completed"
 	StatusFailed    string = "failed"
@@ -16,11 +17,4 @@ type Submit struct {
 	TeamId  string
 	Status  string
 	Message string
-}
-
-type Result struct {
-	gorm.Model
-	
-	SubmitId uint
-	Score float32
 }

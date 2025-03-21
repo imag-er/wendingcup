@@ -15,3 +15,10 @@ func (s *SubmitImpl) Submit(ctx context.Context, req *submit.SubmitRequest) (res
 
 	return resp, err
 }
+
+// GetSubmitList implements the SubmitImpl interface.
+func (s *SubmitImpl) GetSubmitList(ctx context.Context, req *submit.GetSubmitListRequest) (resp *submit.GetSubmitListResponse, err error) {
+	resp, err = service.NewGetSubmitListService(ctx).Run(req)
+
+	return resp, err
+}

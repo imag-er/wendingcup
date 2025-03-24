@@ -27,7 +27,7 @@ tokens = [
     for tid in team_ids
 ]
 
-# 100个队伍，每个队伍提交两次
+# 1每个队伍提交两次
 for i in range(2):
     for i in range(len(team_ids)):
         submit_response = make_request('http://localhost:8080/auth/submit',

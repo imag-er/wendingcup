@@ -2,8 +2,9 @@ FROM python:3.12-slim
 WORKDIR /judger
 
 
-RUN pip install numpy uvicorn tqdm
 
+COPY requirements.txt  /judger/
+RUN pip install -r requirements.txt
 COPY main.py judge.py /judger/
 
 EXPOSE 8381

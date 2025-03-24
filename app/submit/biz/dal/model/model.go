@@ -17,4 +17,5 @@ type Submit struct {
 	TeamId  string
 	Status  string
 	Message string
+	Score float32
 }

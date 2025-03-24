@@ -10,14 +10,12 @@ import (
 	"github.com/imag-er/wendingcup/app/api/infra"
 	"github.com/imag-er/wendingcup/rpc_gen/kitex_gen/board"
 
-	"log"
 )
 
 type BoardRequest struct {
 }
 
 func BoardHandler(ctx context.Context, c *app.RequestContext) {
-	log.Println("Get board request")
 	var req BoardRequest
 	// 解析请求体
 	if err := c.BindAndValidate(&req); err != nil {

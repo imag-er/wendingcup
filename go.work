@@ -5,5 +5,4 @@ use (
 	./app/board
 	./app/submit
 	./app/user
-	./lab
 )

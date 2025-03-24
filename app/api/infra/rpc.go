@@ -5,7 +5,7 @@ import (
 	
 	"github.com/imag-er/wendingcup/app/api/conf"
 	boardservice "github.com/imag-er/wendingcup/rpc_gen/kitex_gen/board/Board"
-	submitservice "github.com/imag-er/wendingcup/rpc_gen/kitex_gen/submit/Submit"
+	submitservice "github.com/imag-er/wendingcup/rpc_gen/kitex_gen/submit/submit"
 	userservice "github.com/imag-er/wendingcup/rpc_gen/kitex_gen/user/User"
 	"github.com/imag-er/wendingcup/common"
 	"sync"

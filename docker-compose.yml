@@ -32,5 +32,16 @@ services:
       - "16686:16686" 
       - "4317:4317"
       - "4318:4318"
+
+  judger:
+    container_name: python_judger
+    build:
+      context: app/submit/python
+      dockerfile: Dockerfile
+    ports:
+      - "8381:8381"
+    volumes:
+      - ./app/submit/submit_files/infer_results_npy:/judger/infer_results_npy
+      - ./app/submit/submit_files/ground_truth:/judger/ground_truth
   
   

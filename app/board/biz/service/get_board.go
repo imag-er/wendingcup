@@ -3,6 +3,7 @@ package service
 import (
 	"context"
 
+	"github.com/cloudwego/kitex/pkg/klog"
 	"github.com/imag-er/wendingcup/app/board/biz/dal/model"
 	"github.com/imag-er/wendingcup/app/board/biz/dal/mysql"
 	board "github.com/imag-er/wendingcup/rpc_gen/kitex_gen/board"
@@ -19,8 +20,12 @@ func NewGetBoardService(ctx context.Context) *GetBoardService {
 func (s *GetBoardService) Run(req *board.GetBoardRequest) (resp *board.GetBoardResponse, err error) {
 	// Finish your business logic.
 	// 获取mysql.DB中以model.Record为模型的所有记录
+
+	klog.Info("==========================")
+
 	var records []model.Result
-	err = mysql.DB.Find(&records).Error
+	err = mysql.DB.Order("score desc").Find(&records).Error
+
 	if err != nil {
 		return nil, err
 	}

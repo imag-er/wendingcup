@@ -24,10 +24,10 @@ print("pinging...\n==============")
 ping_response = make_request('GET', 'http://localhost:8080/ping')
 print(ping_response)
 
-team_id = []
-for id in open("team_id.txt", "r").readlines():
-    id = id.strip()
-    team_id.append(id)
+team_id = [
+    line[:-1] for line in open('team_id.txt').readlines()
+]
+
 
 print("登录中...\n==============")
 login_response = make_request('POST', 'http://localhost:8080/login', data={
@@ -42,7 +42,7 @@ token = login_response['token']
 # auth.POST("/refresh", infra.AuthMiddleware.RefreshHandler)
 print("获取队伍信息...\n==============")
 teaminfo_response = make_request(
-    'GET', f'http://localhost:8080/auth/teaminfo?team_id={team_id[0]}',
+    'GET', f'http://localhost:8080/auth/team/{team_id[0]}',
     headers={'Authorization': f'Bearer {token}'},)
 print('获取队伍信息', teaminfo_response)
 

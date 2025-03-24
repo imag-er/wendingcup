@@ -26,7 +26,6 @@ func RegisterHandler(ctx context.Context, c *app.RequestContext) {
 		c.JSON(consts.StatusBadRequest, utils.H{"error": err.Error()})
 		return
 	}
-	log.Printf("Get register request %v\n", req)
 
 	resp, err := infra.UserClient.Register(ctx, &user.RegisterRequest{
 		Teamname: req.Teamname,

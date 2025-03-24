@@ -4,7 +4,7 @@ import (
 	"context"
 
 	"github.com/imag-er/wendingcup/app/submit/biz/dal/model"
-	"github.com/imag-er/wendingcup/app/user/biz/dal/mysql"
+	"github.com/imag-er/wendingcup/app/submit/biz/dal/mysql"
 	submit "github.com/imag-er/wendingcup/rpc_gen/kitex_gen/submit"
 )
 
@@ -18,18 +18,12 @@ func NewGetSubmitListService(ctx context.Context) *GetSubmitListService {
 // Run create note info
 func (s *GetSubmitListService) Run(req *submit.GetSubmitListRequest) (resp *submit.GetSubmitListResponse, err error) {
 	// 把这里查询到的结果返回给客户端
-	// type Submit struct {
-	// 	gorm.Model
-	// 	TeamId  string
-	// 	Status  string
-	// 	Message string
-	// }
+
 	var submits []model.Submit
 	err = mysql.DB.Where("team_id = ?", req.TeamId).Find(&submits).Error
 	if err != nil {
 		return nil, err
 	}
-
 
 	resp = &submit.GetSubmitListResponse{
 		Code:    0,

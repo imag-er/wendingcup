@@ -1,6 +1,5 @@
 import numpy as np
 from pathlib import Path
-from tqdm import tqdm
 import os
 import json
 
@@ -10,29 +9,31 @@ class Judger:
         self.gt_folder = gt_folder
         self.pred_folder = pred_folder
         self.num_classes = num_classes
-        self.confusion_matrix = np.zeros((num_classes, num_classes), dtype=np.int64)
+        self.confusion_matrix = np.zeros(
+            (num_classes, num_classes), dtype=np.int64)
         self.gt_files = list(Path(gt_folder).glob("*.npy"))
-    
+        print(f"judger inited with gt_folder={gt_folder}, pred_folder={pred_folder}, num_classes={num_classes}")
+
     async def calculate_iou_metrics(self):
         if not self.gt_files:
-            print(f"在{self.gt_folder}中没有找到npy格式的ground truth文件")
-            return
+            raise RuntimeWarning("没有找到ground truth文件,请联系管理员")
 
-        print(f"找到 {len(self.gt_files)} 个ground truth文件")
-        for gt_file in tqdm(self.gt_files, desc="计算IoU"):
+        for gt_file in self.gt_files:
             filename = gt_file.stem
             pred_file = Path(self.pred_folder) / f"{filename}.npy"
             if not pred_file.exists():
-                print(f"预测文件不存在: {pred_file}")
-                continue
+                raise RuntimeWarning("预测文件不存在,请联系管理员")
+
             gt = np.load(str(gt_file))
             pred = np.load(str(pred_file))
             if gt.shape != pred.shape:
-                print(f"形状不匹配: gt={gt.shape}, pred={pred.shape}, 文件={filename}")
-                continue
+                raise RuntimeWarning(
+                    f"形状不匹配: gt={gt.shape}, pred={pred.shape}, 文件={filename}")
+
             for i in range(self.num_classes):
                 for j in range(self.num_classes):
-                    self.confusion_matrix[i, j] += np.sum((gt == i) & (pred == j))
+                    self.confusion_matrix[i,
+                                          j] += np.sum((gt == i) & (pred == j))
 
         iou_per_class = np.zeros(self.num_classes)
         for i in range(self.num_classes):

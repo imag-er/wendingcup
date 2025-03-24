@@ -1,24 +1,26 @@
 package main
 
 import (
-	"time"
+	"os"
+
 	"github.com/imag-er/wendingcup/common"
+
+	"context"
 
 	"github.com/cloudwego/kitex/pkg/klog"
 	"github.com/cloudwego/kitex/server"
-	kitexlogrus "github.com/kitex-contrib/obs-opentelemetry/logging/logrus"
+	"github.com/imag-er/wendingcup/app/board/biz/dal"
 	"github.com/imag-er/wendingcup/app/board/conf"
 	"github.com/imag-er/wendingcup/rpc_gen/kitex_gen/board/board"
-	"go.uber.org/zap/zapcore"
-	"gopkg.in/natefinch/lumberjack.v2"
-	"context"
+	kitexlogrus "github.com/kitex-contrib/obs-opentelemetry/logging/logrus"
 )
 
 func main() {
 	p := common.InitTracing(conf.GetConf().Kitex.Service)
-	defer p.Shutdown(context.Background())	
-
+	defer p.Shutdown(context.Background())
+	
 	opts := kitexInit()
+	dal.Init()
 
 	svr := board.NewServer(new(BoardImpl), opts...)
 
@@ -41,18 +43,8 @@ func kitexInit() (opts []server.Option) {
 	logger := kitexlogrus.NewLogger()
 	klog.SetLogger(logger)
 	klog.SetLevel(conf.LogLevel())
-	asyncWriter := &zapcore.BufferedWriteSyncer{
-		WS: zapcore.AddSync(&lumberjack.Logger{
-			Filename:   conf.GetConf().Kitex.LogFileName,
-			MaxSize:    conf.GetConf().Kitex.LogMaxSize,
-			MaxBackups: conf.GetConf().Kitex.LogMaxBackups,
-			MaxAge:     conf.GetConf().Kitex.LogMaxAge,
-		}),
-		FlushInterval: time.Second,
-	}
-	klog.SetOutput(asyncWriter)
-	server.RegisterShutdownHook(func() {
-		asyncWriter.Sync()
-	})
+
+	klog.SetOutput(os.Stdout)
+
 	return
 }

@@ -6,13 +6,11 @@ import (
 )
 
 var CORSMiddleware = cors.New(cors.Config{
-	AllowOrigins:     []string{"https://foo.com"},
-	AllowMethods:     []string{"PUT", "PATCH"},
-	AllowHeaders:     []string{"Origin"},
-	ExposeHeaders:    []string{"Content-Length"},
+	AllowOrigins:     []string{"*"},
+	AllowMethods:     []string{"*"},
+	AllowHeaders:     []string{"*"},
+	ExposeHeaders:    []string{"*"},
 	AllowCredentials: true,
-	AllowOriginFunc: func(origin string) bool {
-		return origin == "https://github.com"
-	},
+
 	MaxAge: 12 * time.Hour,
 })

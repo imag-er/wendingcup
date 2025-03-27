@@ -1,6 +1,6 @@
 hertz:
   service: "user"
-  address: ":8080"
+  address: ":20000"
 
 registry:
   registry_address:

@@ -33,7 +33,7 @@ func (s *GetSubmitListService) Run(req *submit.GetSubmitListRequest) (resp *subm
 		resp.SubmitList = append(resp.SubmitList, &submit.SubmitInfo{
 			TeamId:   v.TeamId,
 			Status:   v.Message,
-			Time:  v.CreatedAt.String(),
+			Time:  v.CreatedAt.Format("01/02 15:04"),
 		})
 	}
 	return

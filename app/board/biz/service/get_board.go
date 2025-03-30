@@ -2,8 +2,6 @@ package service
 
 import (
 	"context"
-
-	"github.com/cloudwego/kitex/pkg/klog"
 	"github.com/imag-er/wendingcup/app/board/biz/dal/model"
 	"github.com/imag-er/wendingcup/app/board/biz/dal/mysql"
 	board "github.com/imag-er/wendingcup/rpc_gen/kitex_gen/board"
@@ -21,8 +19,6 @@ func (s *GetBoardService) Run(req *board.GetBoardRequest) (resp *board.GetBoardR
 	// Finish your business logic.
 	// 获取mysql.DB中以model.Record为模型的所有记录
 
-	klog.Info("==========================")
-
 	var records []model.Result
 	err = mysql.DB.Order("score desc").Find(&records).Error
 
@@ -30,15 +26,15 @@ func (s *GetBoardService) Run(req *board.GetBoardRequest) (resp *board.GetBoardR
 		return nil, err
 	}
 	resp = &board.GetBoardResponse{
-		Code : 0,
-		Msg : "查询成功",
+		Code: 0,
+		Msg:  "查询成功",
 	}
 	for _, v := range records {
 		resp.JudgeResult = append(resp.JudgeResult, &board.JudgeResult{
-			TeamId:          v.TeamId,
 			Score:           v.Score,
 			FileUploadTime:  v.FileUploadTime,
 			JudgeResultTime: v.JudgeResultTime,
+			TeamName:        v.TeamName,
 		})
 	}
 

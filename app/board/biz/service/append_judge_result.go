@@ -4,9 +4,11 @@ import (
 	"context"
 
 	"github.com/cloudwego/kitex/pkg/klog"
+	"github.com/imag-er/wendingcup/app/board/infra"
 	"github.com/imag-er/wendingcup/app/board/biz/dal/model"
 	"github.com/imag-er/wendingcup/app/board/biz/dal/mysql"
 	board "github.com/imag-er/wendingcup/rpc_gen/kitex_gen/board"
+	user "github.com/imag-er/wendingcup/rpc_gen/kitex_gen/user"
 	"gorm.io/gorm"
 )
 
@@ -19,6 +21,7 @@ func NewAppendJudgeResultService(ctx context.Context) *AppendJudgeResultService 
 
 // Run create note info
 func (s *AppendJudgeResultService) Run(req *board.AppendJudgeResultRequest) (resp *board.AppendJudgeResultResponse, err error) {
+	
 	// 如果数据库中已经存在该记录 (TeamId为uniqueIndex,Primary)，则选择较高的Score更新
 	// 否则插入新记录
 	var val model.Result
@@ -28,12 +31,24 @@ func (s *AppendJudgeResultService) Run(req *board.AppendJudgeResultRequest) (res
 	}
 	if err == gorm.ErrRecordNotFound {
 		// 第一次提交
+		var team_name string
+
+		rpcresp,err := infra.UserClient.GetTeamInfo(s.ctx, &user.GetTeamInfoRequest{
+			TeamId: req.JudgeResult.TeamId,
+		})
+		if err != nil {
+			klog.Error(err)
+			return nil, err
+		}
+		team_name = rpcresp.Teaminfo.Teamname
+
 		klog.Info("第一次提交: ", req.JudgeResult.TeamId)
 		val = model.Result{
 			TeamId: req.JudgeResult.TeamId,
 			Score:  req.JudgeResult.Score,
 			FileUploadTime: req.JudgeResult.FileUploadTime,
 			JudgeResultTime: req.JudgeResult.JudgeResultTime,
+			TeamName: team_name,
 		}
 		err = mysql.DB.Create(&val).Error
 		if err != nil {
@@ -42,7 +57,6 @@ func (s *AppendJudgeResultService) Run(req *board.AppendJudgeResultRequest) (res
 		}
 	} else {
 		// 已经存在记录
-
 		if req.JudgeResult.Score > val.Score {
 			klog.Info("更新分数")
 			err = mysql.DB.Model(&val).Update("score", req.JudgeResult.Score).Error

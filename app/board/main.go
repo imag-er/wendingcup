@@ -9,6 +9,7 @@ import (
 
 	"github.com/cloudwego/kitex/pkg/klog"
 	"github.com/cloudwego/kitex/server"
+	"github.com/imag-er/wendingcup/app/board/infra"
 	"github.com/imag-er/wendingcup/app/board/biz/dal"
 	"github.com/imag-er/wendingcup/app/board/conf"
 	"github.com/imag-er/wendingcup/rpc_gen/kitex_gen/board/board"
@@ -16,6 +17,9 @@ import (
 )
 
 func main() {
+
+	infra.Init()
+
 	p := common.InitTracing(conf.GetConf().Kitex.Service)
 	defer p.Shutdown(context.Background())
 	

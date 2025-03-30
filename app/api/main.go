@@ -19,7 +19,6 @@ func main() {
 	)
 	infra.Init()
 	mw.InitJWT()
-	h.Use(mw.RequestLog)
 	h.Use(mw.CORSMiddleware)
 	h.Use(mw.RequestLog)
 

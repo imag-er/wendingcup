@@ -33,4 +33,5 @@ message JudgeResult {
     string file_upload_time = 2;
     string judge_result_time = 3;
     float score = 4;
+    string team_name = 5;
 }

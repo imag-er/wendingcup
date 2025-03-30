@@ -6,10 +6,10 @@ import (
 	"github.com/cloudwego/hertz/pkg/app"
 	"github.com/cloudwego/hertz/pkg/common/utils"
 	"github.com/cloudwego/hertz/pkg/protocol/consts"
+	"github.com/cloudwego/kitex/pkg/klog"
 	"github.com/imag-er/wendingcup/app/api/apiutils"
 	"github.com/imag-er/wendingcup/app/api/infra"
 	"github.com/imag-er/wendingcup/rpc_gen/kitex_gen/board"
-
 )
 
 type BoardRequest struct {
@@ -24,7 +24,7 @@ func BoardHandler(ctx context.Context, c *app.RequestContext) {
 	}
 
 	resp, err := infra.BoardClient.GetBoard(ctx, &board.GetBoardRequest{})
-
+	klog.Info("GetBoard resp: ", resp, " err: ", err)
 	// 返回响应
 	if apiutils.NotError(c, resp, err) {
 		c.JSON(consts.StatusOK, resp.JudgeResult)

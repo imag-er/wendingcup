@@ -60,8 +60,8 @@ func onCompleted(task JudgeTask, score float32) {
 	resp, err := infra.BoardClient.AppendJudgeResult(context.Background(), &board.AppendJudgeResultRequest{
 		JudgeResult: &board.JudgeResult{
 			TeamId:          task.TeamId,
-			FileUploadTime:  task.UploadTime.Format("2006-01-02 15:04:05"),
-			JudgeResultTime: time.Now().Format("2006-01-02 15:04:05"),
+			FileUploadTime:  task.UploadTime.Format("01/02 15:04"),
+			JudgeResultTime: time.Now().Format("01/02 15:04"),
 			Score:           score,
 		},
 	})

@@ -57,7 +57,11 @@ func GetSubmitHandler(ctx context.Context, c *app.RequestContext) {
 	resp, err := infra.SubmitClient.GetSubmitList(ctx, &submit.GetSubmitListRequest{
 		TeamId: c.Param("team_id"),
 	})
+
 	if apiutils.NotError(c, resp, err) {
+		for _, v := range resp.SubmitList {
+			v.TeamId = ""
+		}
 		c.JSON(consts.StatusOK, utils.H{
 			"submit_list": resp.SubmitList,
 		})

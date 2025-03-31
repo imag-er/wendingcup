@@ -1,9 +1,8 @@
 FROM python:3.12-slim
 WORKDIR /judger
 
-
-
 COPY requirements.txt  /judger/
+RUN pip config set global.index-url https://pypi.tuna.tsinghua.edu.cn/simple
 RUN pip install -r requirements.txt
 COPY main.py judge.py /judger/
 

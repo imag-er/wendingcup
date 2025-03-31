@@ -3,6 +3,7 @@ package service
 import (
 	"context"
 
+	"github.com/cloudwego/kitex/pkg/klog"
 	"github.com/google/uuid"
 	"github.com/imag-er/wendingcup/app/user/biz/dal/model"
 	"github.com/imag-er/wendingcup/app/user/biz/dal/mysql"
@@ -18,6 +19,7 @@ func NewRegisterService(ctx context.Context) *RegisterService {
 
 // Run create note info
 func (s *RegisterService) Run(req *user.RegisterRequest) (resp *user.RegisterResponse, err error) {
+	klog.Info("RegisterService: ", req.Teamname, " ", req.Players)
 	// 判断队伍人数是否为2
 	if len(req.Players) >= 3 {
 		return &user.RegisterResponse{

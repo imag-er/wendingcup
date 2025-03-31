@@ -24,6 +24,9 @@ func (s *AppendJudgeResultService) Run(req *board.AppendJudgeResultRequest) (res
 	
 	// 如果数据库中已经存在该记录 (TeamId为uniqueIndex,Primary)，则选择较高的Score更新
 	// 否则插入新记录
+
+	klog.Info("AppendJudgeResultService: ", req.JudgeResult.TeamId, " ", req.JudgeResult.Score, " ", req.JudgeResult.FileUploadTime, " ", req.JudgeResult.JudgeResultTime)
+
 	var val model.Result
 	err = mysql.DB.Where("team_id = ?", req.JudgeResult.TeamId).First(&val).Error
 	if err != nil && err != gorm.ErrRecordNotFound {

@@ -18,6 +18,7 @@ func NewGetTeamInfoService(ctx context.Context) *GetTeamInfoService {
 
 // Run create note info
 func (s *GetTeamInfoService) Run(req *user.GetTeamInfoRequest) (resp *user.GetTeamInfoResponse, err error) {
+	klog.Info("GetTeamInfoService: ", req.TeamId)
 	var team_val model.Team
 	err = mysql.DB.Where("uuid = ?", req.TeamId).First(&team_val).Error
 	klog.Info(team_val)
@@ -28,7 +29,6 @@ func (s *GetTeamInfoService) Run(req *user.GetTeamInfoRequest) (resp *user.GetTe
 		}, nil
 	}
 
-
 	var player_val []*model.Player
 	err = mysql.DB.Where("team_id = ?", req.TeamId).Find(&player_val).Error
 	if err != nil {
@@ -37,8 +37,6 @@ func (s *GetTeamInfoService) Run(req *user.GetTeamInfoRequest) (resp *user.GetTe
 			Msg:  "查询队伍成员信息失败",
 		}, nil
 	}
-
-	
 
 	resp = &user.GetTeamInfoResponse{
 		Teaminfo: &user.TeamInfo{
@@ -53,8 +51,8 @@ func (s *GetTeamInfoService) Run(req *user.GetTeamInfoRequest) (resp *user.GetTe
 	for _, v := range player_val {
 		resp.Teaminfo.Players = append(resp.Teaminfo.Players, &user.Player{
 			Phonenumber: v.Phone,
-			StudentId:    v.StudentId,
-			Name:    v.Name,
+			StudentId:   v.StudentId,
+			Name:        v.Name,
 		})
 	}
 

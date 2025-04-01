@@ -8,3 +8,6 @@ app/submit/submit_files/infer_results_npy/*
 app/submit/submit_files/ground_truth/*
 app/submit/submit_files/*.zip
 *.npy
+deploy/output/*
+deploy/deploy.sh
+deploy/output.tar.gz

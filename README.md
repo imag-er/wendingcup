@@ -17,10 +17,6 @@
 
 ### how to run
 ```
-make gen-all
-docker compose up -d
-cd app/api/ && go run . &
-cd app/submit/ && go run . &
-cd app/board/ && go run . &
-cd app/user/ && go run . &
+git clone git@github.com:imag-er/wendingcup.git
+deploy/deploy.sh
 ```

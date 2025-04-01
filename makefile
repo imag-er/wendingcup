@@ -18,8 +18,8 @@ endef
 .PHONY: gen-all
 gen-all: $(addprefix gen-,$(SERVICES))
 # 为每个服务生成Makefile内容
+mkdir -p rpc_gen db 
 $(foreach service,$(SERVICES),$(eval gen-$(service): ; $(call gen-rpc,$(service)) ))
-# 确保以下命令以制表符开头
 
 .PHONY: clean
 clean:

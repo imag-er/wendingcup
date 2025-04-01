@@ -25,9 +25,9 @@
         }
     }
 
-    let teamName = "tteam";
+    let teamName = "";
     let players = [
-        { student_id: "220110101", name: "lsm", phonenumber: "13812341234" },
+        { student_id: "", name: "", phonenumber: "" },
     ];
     let errorMessage = "";
 
@@ -90,7 +90,18 @@
         })
             .then((res) => res.json())
             .then((data) => {
-                toastSuccess("注册成功", "队伍注册成功");
+                if (data.error != undefined) {
+                    toastError("注册失败", data.message);
+                    return;
+                }
+                console.log(JSON.stringify(data));
+                toastSuccess("注册成功", "队伍注册成功" + data.team_id);
+                alert(
+                    "=============!!重要消息!!=============\n队伍ID：" +
+                        data.team_id +
+                        "\n队伍ID只出现一次, 请牢记并妥善保管\n=============!!重要消息!!=============",
+                );
+                prompt("请牢记队伍ID, 以便后续使用", data.team_id);
                 window.location.reload();
 
                 toggle();

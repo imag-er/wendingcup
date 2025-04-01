@@ -26,6 +26,10 @@
         })
             .then((res) => res.json())
             .then((data) => {
+                if (data.error != undefined) {
+                    toastError("登录失败", data.message);
+                    return;
+                }
                 localStorage.setItem("team_id", teamId);
                 localStorage.setItem("expire", data.expire);
                 localStorage.setItem("token", data.token);
@@ -50,6 +54,10 @@
         )
             .then(CheckJWT)
             .then((res) => {
+                if (res.error != undefined) {
+                    toastError("注册失败", res.message);
+                    return;
+                }
                 toastSuccess("消息", "获取队伍信息成功");
                 localStorage.setItem("team_name", res.teamname);
                 return res;

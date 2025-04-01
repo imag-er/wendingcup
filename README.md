@@ -15,3 +15,12 @@
 - board
     负责评测结果的排序与储存, 防止因评测机问题导致排行榜无法访问
 
+### how to run
+```
+make gen-all
+docker compose up -d
+cd app/api/ && go run . &
+cd app/submit/ && go run . &
+cd app/board/ && go run . &
+cd app/user/ && go run . &
+```

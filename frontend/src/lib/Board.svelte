@@ -10,9 +10,10 @@
         })
             .then((res) => res.json())
             .then((data) => {
-                if (data === undefined) {
+                if (data === undefined || data.error != undefined) {
                     return;
                 }
+
                 board = data;
             });
 

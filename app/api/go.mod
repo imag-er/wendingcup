@@ -3,6 +3,7 @@ module github.com/imag-er/wendingcup/app/api
 go 1.23.4
 
 replace github.com/imag-er/wendingcup/rpc_gen => ../../rpc_gen/
+replace github.com/imag-er/wendingcup/common => ../../common/
 
 require (
 	github.com/cloudwego/hertz v0.9.6

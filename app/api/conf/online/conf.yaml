@@ -4,12 +4,12 @@ hertz:
 
 registry:
   registry_address:
-    - 127.0.0.1:8500
+    - consul:8500
   username: ""
   password: ""
 
 redis:
-  address: "127.0.0.1:6379"
+  address: "redis:6379"
   username: ""
   password: ""
   db: 0

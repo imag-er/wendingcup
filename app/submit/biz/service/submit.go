@@ -23,7 +23,7 @@ func NewSubmitService(ctx context.Context) *SubmitService {
 func (s *SubmitService) Run(req *submit.SubmitRequest) (resp *submit.SubmitResponse, err error) {
 
 	klog.Infof("submit by: %v", req.TeamId)
-
+	
 	// 删除当前队伍的旧文件
 	file.FileManager.RemoveOldFiles(req.TeamId)
 

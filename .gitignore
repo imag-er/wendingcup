@@ -11,3 +11,6 @@ app/submit/submit_files/*.zip
 deploy/output/*
 deploy/deploy.sh
 deploy/output.tar.gz
+deploy/*.tar
+submit_files/*.zip
+*.tar

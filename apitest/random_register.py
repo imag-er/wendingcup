@@ -43,7 +43,7 @@ try:
     with open('team_id.txt', 'w') as file:
         for d in data:
             response = requests.post(
-                'http://localhost:8080/register',
+                'http://localhost:20000/register',
                 json=d,
                 headers={'Content-Type': 'application/json'}
             )

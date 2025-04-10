@@ -18,5 +18,10 @@
 ### how to run
 ```
 git clone git@github.com:imag-er/wendingcup.git
-deploy/deploy.sh
+make gen_all
+make gen_docker
+make save_images
+
+# check deploy/frontend_image.tar & deploy/backend_image.tar
+
 ```

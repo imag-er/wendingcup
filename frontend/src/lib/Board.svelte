@@ -5,7 +5,7 @@
 
     let board = [];
     function getBoard() {
-        let res = fetch("http://localhost:8080/board", {
+        let res = fetch("http://123.207.207.136:20000/board", {
             method: "GET",
         })
             .then((res) => res.json())
@@ -20,7 +20,7 @@
         return res;
     }
 
-    onMount(getBoard);
+    // onMount(getBoard);
     setInterval(getBoard, 5000);
 </script>
 

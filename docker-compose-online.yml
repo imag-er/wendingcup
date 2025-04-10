@@ -1,0 +1,104 @@
+services:
+  consul:
+    image: consul:1.15.4
+    ports:
+      - "8500:8500"
+  mysql:
+    image: mysql:latest
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./db:/var/lib/mysql
+      - ./deploy/config/init.sql:/docker-entrypoint-initdb.d/init.sql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+
+  redis:
+    image: redis:latest
+    ports:
+      - "6379:6379"
+  prometheus:
+    image: prom/prometheus:latest
+    volumes:
+      - ./deploy/config/:/etc/prometheus/
+    command:
+      - "--config.file=/etc/prometheus/prometheus.yml"
+    ports:
+      - "9090:9090"
+  jaeger-all-in-one:
+    container_name: jaeger-all-in-one
+    image: jaegertracing/all-in-one:latest
+    ports:
+      - "16686:16686"
+      - "4317:4317"
+      - "4318:4318"
+  judger:
+    container_name: python_judger
+    image: judger
+    working_dir: /judger
+    command: [ "uvicorn", "main:app", "--reload", "--host", "0.0.0.0", "--port", "8381"]
+    ports:
+      - "8381:8381"
+    volumes:
+      - ./submit_files/infer_results_npy:/judger/infer_results_npy
+      - ./submit_files/ground_truth:/judger/ground_truth
+  user:
+    image: user:latest
+    environment:
+      - OTEL_EXPORTER_OTLP_ENDPOINT=jaeger-all-in-one:4317
+    command: ["./main"]
+    working_dir: /app
+    depends_on:
+      mysql:
+        condition: service_healthy
+  board:
+    image: board:latest
+    environment:
+      - OTEL_EXPORTER_OTLP_ENDPOINT=jaeger-all-in-one:4317
+    depends_on:
+      mysql:
+        condition: service_healthy
+    command: ["./main"]
+    working_dir: /app
+  submit:
+    image: submit:latest
+    environment:
+      - OTEL_EXPORTER_OTLP_ENDPOINT=jaeger-all-in-one:4317
+    depends_on:
+      mysql:
+        condition: service_healthy
+    command: ["./main"]
+    working_dir: /app
+    volumes:
+      - ./submit_files/infer_results_npy:/judger/infer_results_npy
+      - ./submit_files/ground_truth:/judger/ground_truth
+      - ./submit_files:/app/submit_files
+  api:
+    image: api:latest
+    environment:
+      - OTEL_EXPORTER_OTLP_ENDPOINT=jaeger-all-in-one:4317
+    ports:
+      - "20000:20000"
+    command: ["./main"]
+    working_dir: /app
+    depends_on:
+      mysql:
+        condition: service_healthy
+
+  # frontend:
+  #   image: frontend:latest
+  #   ports:
+  #     - "5223:5223"
+  #   depends_on:
+  #     - api
+  #     - board
+  #     - user
+  #   build:
+  #     context: frontend
+  #     dockerfile: ../deploy/svelte.dockerfile

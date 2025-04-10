@@ -23,7 +23,7 @@ team_ids = [
 ]
 
 tokens = [
-    make_request('http://localhost:8080/login',
+    make_request('http://localhost:20000/login',
                  data={'team_id': tid},
                  headers={'Content-Type': 'application/x-www-form-urlencoded'})['token']
     for tid in team_ids

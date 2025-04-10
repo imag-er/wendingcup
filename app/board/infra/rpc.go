@@ -7,13 +7,13 @@ import (
 
 	"github.com/imag-er/wendingcup/app/board/conf"
 	"github.com/imag-er/wendingcup/common"
-	userservice "github.com/imag-er/wendingcup/rpc_gen/kitex_gen/user/User"
+	userservice "github.com/imag-er/wendingcup/rpc_gen/kitex_gen/user/user"
 )
 
 var (
-	once        sync.Once
-	UserClient  userservice.Client
-	err         error
+	once       sync.Once
+	UserClient userservice.Client
+	err        error
 )
 
 func Init() {

@@ -78,7 +78,7 @@
             }
         }
 
-        fetch("http://localhost:8080/register", {
+        fetch("http://123.207.207.136:20000/register", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",

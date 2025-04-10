@@ -44,6 +44,8 @@ func onProcJudging(task JudgeTask) (score float32, err error) {
 
 	klog.Info("处理中: ", task.SubmitId)
 
+	FileManager.Extract(task.FilePath)
+
 	resp := infra.JudgeRequest()
 	if resp.Err != nil {
 		return 0, resp.Err

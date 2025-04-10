@@ -4,9 +4,9 @@ import (
 	"github.com/cloudwego/kitex/client"
 	
 	"github.com/imag-er/wendingcup/app/api/conf"
-	boardservice "github.com/imag-er/wendingcup/rpc_gen/kitex_gen/board/Board"
+	boardservice "github.com/imag-er/wendingcup/rpc_gen/kitex_gen/board/board"
 	submitservice "github.com/imag-er/wendingcup/rpc_gen/kitex_gen/submit/submit"
-	userservice "github.com/imag-er/wendingcup/rpc_gen/kitex_gen/user/User"
+	userservice "github.com/imag-er/wendingcup/rpc_gen/kitex_gen/user/user"
 	"github.com/imag-er/wendingcup/common"
 	"sync"
 )

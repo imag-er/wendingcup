@@ -21,7 +21,7 @@ team_ids = [
 ]
 
 tokens = [
-    make_request('http://localhost:8080/login',
+    make_request('http://localhost:20000/login',
                  data={'team_id': tid},
                  headers={'Content-Type': 'application/x-www-form-urlencoded'})['token']
     for tid in team_ids
@@ -30,7 +30,7 @@ tokens = [
 # 1每个队伍提交两次
 for i in range(2):
     for i in range(len(team_ids)):
-        submit_response = make_request('http://localhost:8080/auth/submit',
+        submit_response = make_request('http://localhost:20000/auth/submit',
                                     headers={
                                         'Authorization': f'Bearer {tokens[i]}'},
                                     data={'team_id': team_ids[i]},

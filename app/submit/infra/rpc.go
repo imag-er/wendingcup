@@ -7,8 +7,8 @@ import (
 
 	"github.com/imag-er/wendingcup/app/submit/conf"
 	"github.com/imag-er/wendingcup/common"
-	boardservice "github.com/imag-er/wendingcup/rpc_gen/kitex_gen/board/Board"
-	userservice "github.com/imag-er/wendingcup/rpc_gen/kitex_gen/user/User"
+	boardservice "github.com/imag-er/wendingcup/rpc_gen/kitex_gen/board/board"
+	userservice "github.com/imag-er/wendingcup/rpc_gen/kitex_gen/user/user"
 )
 
 var (

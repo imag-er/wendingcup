@@ -11,7 +11,7 @@
     
     function getSubmitList() {
         return fetch(
-            `http://localhost:8080/auth/submit/${localStorage.getItem("team_id")}`,
+            `http://123.207.207.136:20000/auth/submit/${localStorage.getItem("team_id")}`,
             {
                 method: "GET",
                 headers: {
@@ -47,7 +47,7 @@
         formData.append("file", files[0]);
         formData.append("team_id", localStorage.getItem("team_id"));
 
-        fetch(`http://localhost:8080/auth/submit`, {
+        fetch(`http://123.207.207.136:20000/auth/submit`, {
             method: "POST",
             headers: {
                 Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -66,7 +66,7 @@
     }
 </script>
 
-<Card class="text-bg-success mb-3">
+<Card class="mb-3">
     <CardHeader>提交</CardHeader>
     {#if LoginStatusAvailable()}
         <div class="mb-3">
